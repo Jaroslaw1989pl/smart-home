@@ -6,9 +6,13 @@ const config = require('../app/config/config');
 
 const app = express();
 
+// parsing incoming requests with urlencoded payloads
+app.use(express.urlencoded({extended: true}));
+// the template engine to use
 app.set('view engine', 'ejs');
+// directory for the application views
 app.set('views', 'public/views');
-
+// built-in middleware function that serves static files
 app.use(express.static(config.ROOT_DIR + '/public'));
 
 app.use('/', require('./../router/router'));

@@ -1,7 +1,8 @@
 // build-in modules
-const mysql = require('mysql');
+const mysql = require('mysql2');
 // custom modules
 const { dbConfig } = require('./config/config');
+
 
 class Database {
   
@@ -14,15 +15,16 @@ class Database {
     });
   }
 
-  selectData(query) {
-    return new Promise((resolve, reject) => {
-      this.connection.connect((error) => {
-        if (error) throw error;
-        this.connection.query(query, (error, result, fields) => {
-          if (error) reject(error);
-          else resolve(result);
-        });
-      });
+  connect() {
+    this.connection.connect((error) => {
+      if (error) throw error;
+      else console.log('Connection to the db was successful');
+    });
+  }
+
+  disconnect() {
+    this.connection.end(() => {
+      console.log('Connection with the db was closed');
     });
   }
 }

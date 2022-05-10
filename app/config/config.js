@@ -2,9 +2,8 @@
 const dotEnv = require('dotenv').config();
 const path = require('path');
 
-// github repository: https://github.com/Jaroslaw1989pl/playfab.git
 
-exports.port = 3000;
+exports.port = 3001;
 
 exports.dbConfig = {
   'db_host': process.env.DB_HOST,

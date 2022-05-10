@@ -10,8 +10,12 @@ const router = express.Router();
 
 // public views routes
 router.get('/', views.home);
-router.get('/login', views.login);
-router.get('/registration', views.registration);
+
+// user authentication routes
+router.route('/login').get(auth.loginForm).post();
+router.route('/registration').get(auth.registrationForm).post(auth.addUser);
+router.route('/registration-get-user-name').get(auth.getUserName).post();
+router.route('/registration-get-user-email').get(auth.getUserEmail).post();
 
 // router.get('/test/:id', (request, response, next) => {
 //   let data = {
@@ -21,9 +25,6 @@ router.get('/registration', views.registration);
 //   console.log('params', request.params); // :id
 //   console.log('query', request.query);
 // });
-
-// user authentication routes
-router.get('/registration-get-user-name', auth.getUserName);
 
 // error views
 router.use(error.notFound);

@@ -6,51 +6,72 @@
   <main>
     <div class="auth-panel">
 
-      <header>
-        <h1>Create an account</h1>
-        <p>Already have an account? <a href="login">Sign in</a></p>
-      </header>
-    
-      <form name="registration-form" action="" method="POST">
-           
-        <!-- User name input -->
-        <label for="user-name">User name</label><br>
-        <input type="text" id="user-name" name="userName" class="registration-input" value="<% %>">
-        <br><label for="user-name" id="user-name-error" style="color: red;"><% %></label>
-        <br>
-    
-        <!-- User email input -->
-        <label for="user-email">Email</label><br>
-        <input type="text" id="user-email" name="userEmail" class="registration-input" value="<% %>">
-        <br><label for="user-email" id="user-email-error" style="color: red;"><% %></label>
-        <br>
-    
-        <!-- User password input -->
-        <label for="user-pass">Password</label><br>
-        <input type="text" id="user-pass" name="userPass" class="registration-input" value="<% %>">
-        <br><label for="ser-pass" id="user-pass-error" style="color: red;"><% %></label>
-        <section id="password-requirements">
-          <strong><p>Create a password that:</p></strong>
-          <ul id="requirements-list">
-            <li id="password-length">contains at least 8 characters</li>
-            <li id="password-letters">contains both lower (a-z) and upper case letters (A-Z)</li>
-            <li id="password-symbols">contains at least one number (0-9) or underscore symbol</li>          
-            <li id="password-alfa-num">does not contain non afpha numeric symbols</li>
-          </ul>
-        </section>
-        <br>
-    
-        <!-- User password input -->  
-        <label for="pass-conf">Confirm password</label><br>
-        <input type="text" id="pass-conf" name="passConf" class="registration-input" value="<% %>">
-        <br><label for="pass-conf" id="pass-conf-error" style="color: red;"><% %></label>
-        <br>
-        <!-- privacy policy accept button -->
-           
-        <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Creat account" >
-    
-      </form>
-    
+      <% if (registrationCompleted) { %>
+
+        <h1>Rejestracja powidła się</h1>
+
+      <% } else { %>
+
+        <header>
+          <h1>Create an account</h1>
+          <p>Already have an account? <a href="login">Sign in</a></p>
+        </header>
+      
+        <form name="registration-form" action="/registration" method="POST">
+            
+          <!-- User name input -->
+          <label for="user-name">User name</label><br>
+          <input type="text" id="user-name" name="userName" class="registration-input" value="<% %>">
+          <br>
+          <label for="user-name" id="user-name-error" style="color: red;">
+            <%= typeof errors !== 'undefined' ? errors.userName : '' %>
+          </label>
+          <br>
+      
+          <!-- User email input -->
+          <label for="user-email">Email</label><br>
+          <input type="text" id="user-email" name="userEmail" class="registration-input" value="<% %>">
+          <br>
+          <label for="user-email" id="user-email-error" style="color: red;">
+            <%= typeof errors !== 'undefined' ? errors.userEmail : '' %>
+          </label>
+          <br>
+      
+          <!-- User password input -->
+          <label for="user-pass">Password</label><br>
+          <input type="text" id="user-pass" name="userPass" class="registration-input" value="<% %>">
+          <br>
+          <label for="ser-pass" id="user-pass-error" style="color: red;">
+            <%= typeof errors !== 'undefined' ? errors.userPass : '' %>
+          </label>
+          <section id="password-requirements">
+            <strong><p>Create a password that:</p></strong>
+            <ul id="requirements-list">
+              <li id="password-length">contains at least 8 characters</li>
+              <li id="password-letters">contains both lower (a-z) and upper case letters (A-Z)</li>
+              <li id="password-symbols">contains at least one number (0-9) or underscore symbol</li>          
+              <li id="password-alfa-num">does not contain non afpha numeric symbols</li>
+            </ul>
+          </section>
+          <br>
+      
+          <!-- User password input -->  
+          <label for="pass-conf">Confirm password</label><br>
+          <input type="text" id="pass-conf" name="passConf" class="registration-input" value="<% %>">
+          <br>
+          <label for="pass-conf" id="pass-conf-error" style="color: red;">
+            <%= typeof errors !== 'undefined' ? errors.passConf : '' %>
+          </label>
+          <br>
+          <!-- privacy policy accept button -->
+            
+          <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Creat account" >
+      
+        </form>
+
+      <% } %>
+
     </div>
   </main>
+
 <%- include('../includes/auth-footer.ejs') %>

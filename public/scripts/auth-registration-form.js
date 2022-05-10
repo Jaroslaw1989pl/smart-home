@@ -16,16 +16,9 @@ if (document.getElementById('user-name')) {
       else {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = () => {
-          if (xhttp.status >= 200 && xhttp.status < 300) {
-            if (xhttp.readyState == 4) {
-              // if (xhttp.responseText/* == userNameInput.value*/) {
-              //   userNameError.textContent = 'User name already taken.';
-              // } else {
-              //   userNameError.textContent = '';
-              // } 
-              userNameError.textContent = xhttp.responseText;
-              console.log(JSON.parse(xhttp.responseText)[0].user_name);
-            }
+          if (xhttp.status == 200 && xhttp.readyState == 4) {
+            if (JSON.parse(xhttp.responseText)) userNameError.textContent = 'User name already taken.';
+            else userNameError.textContent = '';
           }
         }
         xhttp.open('GET', `/registration-get-user-name?userName=${userNameInput.value}`, true);
@@ -45,7 +38,7 @@ if (document.getElementById('user-email')) {
 
   const emailRegex = /^([\w]+[.|-]{0,1}[\w]+)+@([\w]+-{0,1}[\w]+\.)+[a-zA-Z]{2,3}$/i;
   const userEmailInput = document.getElementById('user-email');
-  const userEmailParagraph = document.getElementById('user-email-error');
+  const userEmailError = document.getElementById('user-email-error');
 
   const emailValidation = () => {
 
@@ -56,22 +49,16 @@ if (document.getElementById('user-email')) {
       else if (emailRegex.test(userEmailInput.value)) {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = () => {
-          if (xhttp.status >= 200 && xhttp.status < 300) {
-            if (xhttp.readyState == 4) {
-              if (xhttp.responseText/* == userEmailInput.value*/) {
-                userEmailParagraph.textContent = 'Email address already taken.';
-              } else {
-                userEmailParagraph.textContent = '';
-              } 
-              // userEmailParagraph.textContent = xhttp.responseText;
-            }
+          if (xhttp.status == 200 && xhttp.readyState == 4) {
+            if (JSON.parse(xhttp.responseText)) userEmailError.textContent = 'Email address already taken.';
+            else userEmailError.textContent = '';
           }
         }
-        xhttp.open('GET', '/registration/user-email-verification?userEmail=' + userEmailInput.value, true);
+        xhttp.open('GET', `/registration-get-user-email?userEmail=${userEmailInput.value}`, true);
         xhttp.send();
       }
     } catch (error) {
-      userEmailParagraph.textContent = error;
+      userEmailError.textContent = error;
     }
   };
 
