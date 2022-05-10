@@ -1,0 +1,30 @@
+<%- include('../includes/auth-head.ejs') %>
+  <main>
+    <div class="auth-panel">
+
+      <header>
+        <h1>Sing in</h1>
+        <p>New user? <a href="/registration">Create an account</a></p>
+      </header>
+      
+      <form name="login-form" action="" method="POST">
+        
+        <!-- User email input -->
+        <label for="user-email">User email</label><br>
+        <input type="text" id="user-email" name="userEmail" class="registration-input" value="<% %>">
+        <br>
+        
+        <!-- User password input -->
+        <label for="user-pass">Password</label><a href="reset-password">Forgot password?</a><br>
+        <input type="text" id="user-pass" name="userPass" class="registration-input"  value="<% %>">
+        <br>
+    
+        <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Sign in" >
+        
+      </form>
+      <br>
+      <label for="" id="login-error" style="color: red;"><% %></label>
+    
+    </div>
+  </main>
+<%- include('../includes/auth-footer.ejs') %>

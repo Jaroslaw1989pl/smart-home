@@ -1,0 +1,27 @@
+body {
+  margin: 0;
+  /* background-image: url('../../../static/assets/layouts/auth-background.jpg'); */
+  /* background-size: cover; */
+  background-color: #cf94ca;
+}
+
+  .auth-panel {
+    margin: auto;
+    width: 400px;
+    padding: 25px;
+    background-color: #ffffff;
+  }
+
+
+/* registartion form */
+
+    #password-requirements {
+      display: none;
+    }
+
+      #requirements-list {
+        padding-left: 20px;
+      }
+
+      
+/* login form */
