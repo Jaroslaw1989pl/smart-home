@@ -15,18 +15,27 @@ class Database {
     });
   }
 
-  connect() {
-    this.connection.connect((error) => {
-      if (error) throw error;
-      else console.log('Connection to the db was successful');
-    });
-  }
+  // connect() {
+  //   this.connection.connect((error) => {
+  //     if (error) throw error;
+  //     else console.log('Connection to the db was successful');
+  //   });
+  // }
 
-  disconnect() {
-    this.connection.end(() => {
-      console.log('Connection with the db was closed');
-    });
-  }
+  // disconnect() {
+  //   this.connection.end(() => {
+  //     console.log('Connection with the db was closed');
+  //   });
+  // }
+
+  // query(query, values) {
+  //   return new Promise((resolve, reject) => {
+  //     this.connection.query(query, values, (error, result, fields) => {
+  //       if (error) reject(error);
+  //       else resolve(result);
+  //     });
+  //   });
+  // }
 }
 
 module.exports = Database;

@@ -29,6 +29,13 @@ class Registration {
     this.#passConf = passConf;
   }
 
+  // getUserName(userName, callback) {
+  //   const query = "SELECT user_name FROM registrated_users WHERE user_name = ?";
+  //   this.database.query(query, userName)
+  //   .then(result => callback(result))
+  //   .catch(error => callback(error));
+  // }
+
   getUserName(userName) {
     const query = "SELECT user_name FROM registrated_users WHERE user_name = ?";
     return new Promise((resolve, reject) => {
@@ -36,9 +43,15 @@ class Registration {
         if (error) reject(error);
         else resolve(result);
       });
-      this.database.disconnect();
     });
   }
+
+  // getUserEmail(userEmail, callback) {
+  //   const query = "SELECT user_email FROM registrated_users WHERE user_email = ?";
+  //   this.database.query(query, userEmail)
+  //   .then(result => callback(result));
+  //   .catch(error => callback(error));
+  // }
 
   getUserEmail(userEmail) {
     const query = "SELECT user_email FROM registrated_users WHERE user_email = ?";
@@ -47,7 +60,6 @@ class Registration {
         if (error) reject(error);
         else resolve(result);
       });
-      this.database.disconnect();
     });
   }
 
@@ -56,22 +68,7 @@ class Registration {
       if (this.#userName.length === 0) throw 'Please enter your user name.';
       if (/[^\w]/.test(this.#userName)) throw 'The username can only contain Latin letters, numbers and underscore.';
       if (this.#userName.length < 3) throw 'The username should be at least 3 characters long.';
-      if (this.#userName.length > 24) throw 'The username should not exceed 24 characters.';
-      else {
-        this.getUserName(this.#userName)
-          .then(data => {
-            try {
-              if (data.length > 0)  throw 'User name already taken.';
-            } catch (error) {
-              this.errors.userName = error;
-              this.isFormValid = false;
-            }
-          });
-          // .catch(error => {
-          //   this.errors.userName = error;
-          //   this.isFormValid = false;
-          // });
-      }
+      if (this.#userName.length > 24) throw 'The username should not exceed 24 characters.';    
     } catch (error) {
       this.errors.userName = error;
       this.isFormValid = false;
@@ -85,7 +82,6 @@ class Registration {
     try {
       if (this.#userEmail.length === 0) throw 'Please enter your email address.';
       if (!emailRegex.test(this.#userEmail)) throw 'That\'s an invalid email.';
-      // else if (emailRegex.test(this.#userEmail))
     } catch (error) {
       this.errors.userEmail = error;
       this.isFormValid = false;

@@ -1,5 +1,6 @@
 // build-in modules
 const express = require('express');
+const session = require('express-session');
 // custom modules
 const config = require('../app/config/config');
 
@@ -14,7 +15,10 @@ app.set('view engine', 'ejs');
 app.set('views', 'public/views');
 // built-in middleware function that serves static files
 app.use(express.static(config.ROOT_DIR + '/public'));
+// 
+app.use(session({secret: 'ks12256', name: 'sessionId', resave: false, saveUninitialized: false}));
 
+// routes
 app.use('/', require('./../router/router'));
 
 app.listen(config.port, () => {
