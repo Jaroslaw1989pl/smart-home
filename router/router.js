@@ -1,9 +1,11 @@
 // build-in modules
 const express = require('express');
 // custom modules
+const { protected } = require('./../middleware/auth');
 const views = require('./../controllers/views-controller');
-const error = require('./../controllers/error-controller');
 const auth = require('./../controllers/auth-controller');
+const settings = require('./../controllers/settings-controller');
+const error = require('./../controllers/error-controller');
 
 
 const router = express.Router();
@@ -12,19 +14,23 @@ const router = express.Router();
 router.get('/', views.home);
 
 // user authentication routes
-router.route('/login').get(auth.loginForm).post();
-router.route('/registration').get(auth.registrationForm).post(auth.addUser);
-router.route('/registration-get-user-name').get(auth.getUserName).post();
-router.route('/registration-get-user-email').get(auth.getUserEmail).post();
+router.route('/login').get(views.loginForm).post(auth.login);
 
-// router.get('/test/:id', (request, response, next) => {
-//   let data = {
-//     pageTitle : 'Playfab | TEST'
-//   };
-//   response.render('home.ejs', data);
-//   console.log('params', request.params); // :id
-//   console.log('query', request.query);
-// });
+router.route('/registration').get(views.registrationForm).post(auth.registration);
+router.route('/registration-get-user-name').get(auth.findUserName).post();
+router.route('/registration-get-user-email').get(auth.findUserEmail).post();
+
+router.route('/reset-password').get(views.resetPassword).post(auth.resetPassword);
+router.route('/reset-password/:token').get(views.newPassword).post();
+router.route('/new-password').get().post(auth.newPassword);
+
+// user profile routes - protected routes
+router.route('/profile-settings').get(protected, views.profileSettings).post();
+router.route('/profile-avatar').get().post(settings.profileAvatar);
+
+router.route('/profile-delete').get(protected, views.profileDelete).post(auth.delete);
+
+router.route('/logout').get().post(auth.logout);
 
 // error views
 router.use(error.notFound);

@@ -1,0 +1,118 @@
+<%- include('../includes/main-head.ejs') %>
+
+<!-- STYLES -->
+<link rel="stylesheet" href="/styles/profile-settings.css">
+
+  <main>
+
+    <section class="content">
+
+      <h1>ACCOUNT MENAGEMENT</h1>
+      <!-- user personal avatar -->
+      <div class="info-personal-avatar">
+        <img src="<%= %>" alt="profile avatar">
+        <form action="/profile-avatar" method="POST" enctype="multipart/form-data">
+          <input type="file" name="avatar" id="img-input">
+          <input type="submit" name="img-submit-btn" value="Upload">
+          <label for="info-personal-avatar" id="avatar-error" style="color: red;"><%= %></label>
+        </form>
+      </div>
+    
+      <div class="info-personal">
+        <div class="info-personal-user">
+          <!-- Username section -->
+          <div class="info-personal-wrapper username">
+            <div class="info-cell-icon">
+              <img src="" alt="info-cell-icon">
+            </div>
+            <div class="info-cell-value">
+              <h3><%= %></h3>
+            </div>
+            <div class="info-cell-edit">
+              <a href="/profile/settings/change-username">Change</a>
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+          <!-- User birthday section -->
+          <div class="info-personal-wrapper birthday">
+            <div class="info-cell-icon">
+              <img src="" alt="info-cell-icon">
+            </div>
+            <div class="info-cell-value">
+              <p><%= %></p>
+            </div>
+            <div class="info-cell-edit">
+            <a href="/profile/settings/user-birthday"><button>Specify</button></a>
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+          <!-- User location section -->
+          <div class="info-personal-wrapper location">
+            <div class="info-cell-icon">
+              <img src="" alt="info-cell-icon">
+            </div>
+            <div class="info-cell-value">
+              <p id="user-location">Place of residance: </p>
+            </div>
+            <div class="info-cell-edit">
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+    
+        <div class="info-personal-security">
+          <h3>Account Security Settings</h3>
+          <!-- User email section -->
+          <div class="info-personal-wrapper email">
+            <div class="info-cell-icon">
+              <img src="" alt="info-cell-icon">
+            </div>
+            <div class="info-cell-value">
+              <p><b><%= %></b></p>
+              <p>Email address added: <%= %></p>
+            </div>
+            <div class="info-cell-edit">
+              <a href="/profile/settings/user-email">Change</a>
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+          <!-- User password section -->
+          <div class="info-personal-wrapper">
+            <div class="info-cell-icon">
+              <img src="" alt="info-cell-icon">
+            </div>
+            <div class="info-cell-value">
+              <p>Password added: <%= %></p>
+            </div>
+            <div class="info-cell-edit">
+              <a href="/profile/settings/user-password">Change</a>
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+    
+        <div class="info-personal-data">
+          <h3>Data Protection</h3>
+          <!-- User delete section -->
+          <div class="info-personal-wrapper data">
+            <div class="info-cell-icon">
+              <img src="" alt="info-cell-icon">
+            </div>
+            <div class="info-cell-value">
+              <p>Delete <b><%= %></b> user account</p>
+            </div>
+            <div class="info-cell-edit">
+              <a href="/profile-delete"><button>Delete account</button></a>
+            </div>
+            <p>UWAGA do usunięcia! Przy usuwaniu konta należy usuwać wszystkie dane z tabel</p>
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+    
+      <div style="clear: both;"></div>
+      
+    </section>
+
+  </main>
+  
+<%- include('../includes/main-footer.ejs') %>

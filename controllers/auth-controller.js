@@ -1,34 +1,20 @@
+// build-in modules
+const bcrypt = require('bcryptjs');
 // custom modules
 const Registration = require('../models/auth-registration-model');
+const Login = require('../models/auth-login-model');
+const User = require('./../models/user-model');
+const ResetPassword = require('./../models/auth-reset-password-model');
+const NewPassword = require('../models/auth-new-password-model');
+const DeleteUser = require('../models/auth-delete-model');
 
 
-exports.loginForm = (request, response, next) => {
-  let data = {
-    html: {
-      title: 'Playfab | Sign in'
-    }
-  };
-  response.render('auth-login.ejs', data);
-};
+/*** USER REGISTRATION ***/
 
-exports.registrationForm = (request, response, next) => {
-  let data = {
-    html: {
-      title: 'Playfab | Sign up'
-    }
-  };
-  response.render('auth-registration.ejs', data);
-};
-
-exports.getUserName = (request, response, next) => {
-  const registration = new Registration();
-  
-  // registration.getUserName(request.query.userName, result => {
-  //   if (result.length > 0) response.send(true);
-  //   else response.send(false);
-  // });
-
-  registration.getUserName(request.query.userName)
+exports.findUserName = (request, response, next) => {
+  // const form = new Registration();
+  // form.getUserName(request.query.userName)
+  (new Registration()).getUserName(request.query.userName)
   .then(data => {
     if (data.length > 0) response.send(true);
     else response.send(false);
@@ -36,15 +22,8 @@ exports.getUserName = (request, response, next) => {
   .catch(error => console.log(error));
 };
 
-exports.getUserEmail = (request, response, next) => {
-  const registration = new Registration();
-  
-  // registration.getUserEmail(request.query.userEmail, result => {
-  //   if (result.length > 0) response.send(true);
-  //   else response.send(false);
-  // });
-
-  registration.getUserEmail(request.query.userEmail)
+exports.findUserEmail = (request, response, next) => {
+(new Registration()).getUserEmail(request.query.userEmail)
   .then(data => {
     if (data.length > 0) response.send(true);
     else response.send(false);
@@ -52,53 +31,269 @@ exports.getUserEmail = (request, response, next) => {
   .catch(error => console.log(error));
 };
 
-exports.addUser = (request, response, next) => {
-  const registration = new Registration();
-  registration.setUserData(request.body.userName, request.body.userEmail, request.body.userPass, request.body.passConf);
-  registration.nameValidation();
-  registration.emailValidation();
-  registration.passValidation();
-  registration.passConfirmation();
+exports.registration = (request, response, next) => {
+  let formData = {
+    userName: request.body.userName,
+    userEmail: request.body.userEmail,
+    userPass: request.body.userPass,
+    passConf: request.body.passConf
+  };
 
-  registration.getUserName(request.body.userName)
+  const form = new Registration();
+
+  form.setUserData(formData);
+
+  // 1. validating user inputs
+  form.nameValidation();
+  form.emailValidation();
+  form.passValidation();
+  form.passConfirmation();
+  
+  // 2. verifying user name uniqueness
+  form.getUserName(request.body.userName)
   .then(data => {
-    // console.log(data);
     if (data.length > 0) {
-      registration.errors.userName = 'User name already taken.';
-      registration.isFormValid = false;
+      form.errors.userName = 'User name already taken.';
+      form.isFormValid = false;
     }
-    return registration.getUserEmail(request.body.userEmail);
+    // 3. verifying user name uniqueness
+    return form.getUserEmail(request.body.userEmail);
   })
   .then(data => {
-    // console.log(data);
     if (data.length > 0) {
-      registration.errors.userEmail = 'Email address already taken.';
-      registration.isFormValid = false;
+      form.errors.userEmail = 'Email address already taken.';
+      form.isFormValid = false;
     }
-    return;
   })
   .then(() => {
-    if (registration.isFormValid) {
-      // console.log('rejestracja powiodła się', request.body);
-      let data = {
-        html: {
-          title: 'Playfab | Sign up'
-        },
-        registrationCompleted: true
-      };
-      // response.redirect('/registration');
-      response.render('auth-registration.ejs', data);
+    if (!form.isFormValid) {
+      request.session.errors = form.errors;
+      request.session.inputs = formData;
+      response.redirect('/registration');
     } else {
-      // console.log('rejestracja NIE powiodła się', registration.errors);
-      let data = {
-        html: {
-          title: 'Playfab | Sign up'
-        },
-        errors: registration.errors
-      };
-      // response.redirect('/registration');
-      response.render('auth-registration.ejs', data);
+      // 4. hashing password
+      /*return*/ bcrypt.hash(formData.userPass, 12)
+      .then((hashedPass) => {
+        formData.userPass = hashedPass;
+        const user = new User();
+        user.addSpace(formData.userName);
+        /*return*/ user.add(formData);
+      })
+      .then(() => {
+        request.session.isRegistrationCompleted = true;
+        response.redirect('/registration');
+      })
+      .catch(error => console.log(error));;
     }
   })
   .catch(error => console.log(error));
+};
+
+/*** USER LOGIN ***/
+
+exports.login = (request, response, next) => {
+  let formData = {
+    userEmail: request.body.userEmail,
+    userPass: request.body.userPass,
+  };
+
+  const form = new Login();
+  
+  form.setUserData(formData);
+
+  // 1. Inputs validation
+  if (!form.emailValidation() || !form.passValidation()) {
+    request.session.errors = 'Invalid username or password.';
+    request.session.inputs = formData;
+    response.redirect('/login');
+  } else {
+    form.findUser()
+    .then(result => {
+      if (result.length === 0) {
+        request.session.errors = 'Invalid username or password.';
+        request.session.inputs = formData;
+        response.redirect('/login');
+      } else {
+        bcrypt.compare(formData.userPass, result[0].user_password)
+        .then(match => {
+          if (match) {
+            const user = new User();
+            user.set(result[0]);
+            request.session.user = user.get();
+            request.session.isLoggedIn = true;
+            response.redirect('/');
+          } else {
+            request.session.errors = 'Invalid username or password.';
+            request.session.inputs = formData;
+            response.redirect('/login');
+          }
+        })
+        .catch(error => console.log(error));
+      }
+    })
+    .catch(error => console.log(error));
+  }
+};
+
+/*** USER LOGOUT ***/
+
+exports.logout = (request, response, next) => {
+  request.session.destroy();
+  response.redirect('/');
+};
+
+/*** USER DELETE ***/
+
+exports.delete = (request, response, next) => {
+  const form = new DeleteUser(response.locals.user);
+  
+  if (request.body.emailSubmitBtn) {
+    // creating code and sending email
+    form.createCode();
+    form.saveCode()
+    .then(() => {
+      form.sendCode();
+      response.redirect('/profile-delete');
+    })
+    .catch(error => console.log('Sending delete account confirmation code', error));
+  } else if (request.body.codeSubmitBtn) {
+    // verifying code
+    if (form.validateCode(request.body.code)) {
+      form.findCode(request.body.code)
+      .then(result => {
+        if (result.length === 0) {
+          request.session.errors = {code: 'Invalid code.'};
+          request.session.inputs = request.body.code;
+        } else {
+          request.session.isCodeCorrect = true;
+        }
+        response.redirect('/profile-delete');
+      })
+      .catch(error => console.log('verifying delete profile code', error));
+    } else {
+      request.session.errors = form.errors;
+      request.session.inputs = request.body.code;
+      response.redirect('/profile-delete');
+    }
+  } else if (request.body.deleteSubmitBtn) {
+    // verifying password
+    if (form.validatePassword(request.body.userPass)) {
+      form.verifyPassword()
+      .then(result => {
+        if (result === 0) {
+          // incorrect password
+          request.session.errors = {password: 'Incorrect password.'};
+          request.session.inputs = request.body.userPass;
+          response.redirect('/profile-delete');
+        } else {
+          bcrypt.compare(request.body.userPass, result[0].user_password)
+          .then(match => {
+            if (match) {
+              // correct password
+              const user = new User();
+              user.delete(response.locals.user.id)
+              user.deleteSpace(response.locals.user.name);
+              form.deleteCode();
+              request.session.destroy();
+              response.redirect('/');
+            } else {
+              request.session.errors = {password: 'Incorrect password.'};
+              request.session.inputs = request.body.userPass;
+              response.redirect('/profile-delete');
+            }
+          })
+          .catch(error => console.log(error));
+        }
+      })
+      .catch(error => console.log(error));
+    } else {
+      request.session.errors = form.errors;
+      request.session.inputs = request.body.userPass;
+      response.redirect('/profile-delete');
+    }
+  }
+};
+
+/*** RESET PASSWORD ***/
+
+exports.resetPassword = (request, response, next) => {
+  let formData = {
+    userEmail: request.body.userEmail
+  };
+  
+  const reset = new ResetPassword(formData);
+  // 1. email address validation
+  reset.emailValidation();
+  if (reset.isFormValid) {
+    // 2. verifying email address exists in database
+    const form = new Registration();
+    form.getUserEmail(formData.userEmail)
+    .then(data => {
+      if (data.length === 0) {
+        request.session.errors = 'This email address is not associated with a personal user account';
+        request.session.inputs = formData;
+        response.redirect('/reset-password');
+      } else {
+        reset.deleteToken()
+        .then(() => {
+          reset.createToken();
+          reset.sendEmail();
+          request.session.isEmailSent = true;
+          response.redirect('/reset-password');
+        })
+        .catch(error => console.log(error));
+      }
+    })
+    .catch(error => console.log(error));
+  } else {
+    request.session.errors = reset.errors;
+    request.session.inputs = formData;
+    response.redirect('/reset-password');
+  }
+};
+
+/*** NEW PASSWORD ***/
+
+exports.newPassword = (request, response, next) => {
+  let formData = {
+    userEmail: request.body.userEmail,
+    token: request.body.token,
+    userPass: request.body.userPass,
+    passConf: request.body.passConf
+  };
+
+  const form = new NewPassword();
+  
+  form.setUserData(formData);
+  form.passValidation();
+  form.passConfirmation();
+
+  if (form.isFormValid) {
+    form.passUniquenessValidation()
+    .then(result => {
+      return bcrypt.compare(formData.userPass, result[0].user_password);
+    })
+    .then(match => {
+      if (match) {
+        form.errors.passUniq = 'The new password can not be the same as previous';
+        request.session.errors = form.errors;
+        request.session.inputs = formData;
+        response.redirect('/reset-password/' + formData.token);
+      } else {
+        bcrypt.hash(formData.userPass, 12)
+        .then((hashedPass) => {
+          form.passUpdate(hashedPass);
+          form.deleteToken();
+          request.session.isPasswordChanged = true;
+          response.redirect('/reset-password/' + formData.token);
+        })
+        .catch(error => console.log(error));
+      }
+    })
+    .catch(error => console.log(error));
+  } else {
+    request.session.errors = form.errors;
+    request.session.inputs = formData;
+    response.redirect('/reset-password/' + formData.token);
+  }
 };

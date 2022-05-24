@@ -1,0 +1,108 @@
+<%- include('../includes/main-head.ejs') %>
+
+<!-- SCRIPTS -->
+<!-- <script src="/static/scripts/auth-delete-validation.js" defer></script> -->
+
+  <main>
+
+    <a href="/profile-settings"><- Account Management</a>
+
+    <header>
+      <h1>ACCOUNT DELETION</h1>
+    </header>
+
+    <p>After your account has been deleted, you will lose access to the games. All your personal data will be deleted.</p>
+    <p>If you are sure that you want to delete your follow below steps:</p>
+
+
+    
+    <% if (typeof isEmailSent !== 'undefined' && isEmailSent) { %>
+      
+      <!-- FORM 1 COMPLETE -->
+
+      <header style="background-color: orange;">
+        <p><b>1. Confirmation code was sent to email: <%= user.email %></b></p>
+        <p>To continue deleting account, enter the confirmation code. The code is valid for 1 hour. If you do not enter the code, you will not be able to delete profile.</p>
+      </header>
+
+      <!-- FORM 2 -->
+  
+      <% if (typeof isCodeCorrect !== 'undefined' && isCodeCorrect) { %>
+        
+        <!-- FORM 2 COMPLETE -->
+    
+        <header style="background-color: rgb(255, 115, 0);">
+          <p><b>2. Confirmation code was correct</b></p>
+          <p>To continue deleting account, enter the password.</p>
+        </header>
+
+        <!-- FORM 3 -->
+
+        <label for="delete-form" id="form-error" style="color: red;"><%= %></label>
+        
+        <form name="delete-form" action="/profile-delete" method="POST" style="background-color: pink;">
+        
+          <header>
+            <p><b>3. Confirm password</b></p>
+            <p>To delete account, please enter your account password.</p>
+          </header>
+        
+          <!-- User password input -->
+          <label for="user-pass">Password</label><br>
+          <input type="text" id="user-pass" name="userPass" class="registration-input"  value="<%= 
+            typeof inputs !== 'undefined' ? inputs : ''
+          %>">
+          <br><label for="password" id="password-error" style="color: red;">
+            <%= typeof errors !== 'undefined' ? errors.password : '' %>
+          </label>
+          <br>
+        
+          <input type="submit" id="delete-submit-btn" name="deleteSubmitBtn" value="Delete Account" >
+        
+        </form>
+      
+      <% } else { %>
+
+        <label for="code-form" id="form-error" style="color: red;"><%= %></label>
+  
+        <form name="code-form" action="/profile-delete" method="POST" style="background-color: greenyellow;">
+  
+          <header>
+            <p><b>2. Confirm code</b></p>
+            <p>To delete account, enter code received on yours personal email address.</p>
+          </header>
+  
+          <!-- User code input -->
+          <label for="code">Email confirmation code</label><br>
+          <input type="text" id="code" name="code" class="registration-input" value="<%= 
+            typeof inputs !== 'undefined' ? inputs : ''
+          %>">
+          <label for="code" id="code-error" style="color: red;"><%= typeof errors !== 'undefined' ? errors.code : '' %></label>
+          <br>
+  
+          <input type="submit" id="code-submit-btn" name="codeSubmitBtn" value="Activate" >
+  
+        </form>
+
+      <% } %>
+
+    <% } else { %>
+
+      <!-- FORM 1 -->
+      
+      <form name="email-form" action="/profile-delete" method="POST" style="background-color: orange;">
+
+        <header>
+          <p><b>1. Generete code</b></p>
+          <p>To delete account, click Send email. The code will be sent to your email address.</p>
+        </header>
+
+        <input type="submit" id="email-submit-btn" name="emailSubmitBtn" value="Send email">
+        
+      </form>
+
+    <% } %>
+
+  </main>
+  
+<%- include('../includes/main-footer.ejs') %>

@@ -4,9 +4,10 @@
 <script src="/scripts/auth-registration-form.js" defer></script>
 
   <main>
+
     <div class="auth-panel">
 
-      <% if (typeof registrationCompleted !== 'undefined' && registrationCompleted) { %>
+      <% if (typeof isRegistrationCompleted !== 'undefined' && isRegistrationCompleted) { %>
 
         <h1>Rejestracja powidła się</h1>
 
@@ -21,7 +22,9 @@
             
           <!-- User name input -->
           <label for="user-name">User name</label><br>
-          <input type="text" id="user-name" name="userName" class="registration-input" value="<% %>">
+          <input type="text" id="user-name" name="userName" class="registration-input" value="<%= 
+            typeof inputs !== 'undefined' ? inputs.userName : ''
+          %>">
           <br>
           <label for="user-name" id="user-name-error" style="color: red;">
             <%= typeof errors !== 'undefined' ? errors.userName : '' %>
@@ -30,7 +33,9 @@
       
           <!-- User email input -->
           <label for="user-email">Email</label><br>
-          <input type="text" id="user-email" name="userEmail" class="registration-input" value="<% %>">
+          <input type="text" id="user-email" name="userEmail" class="registration-input" value="<%= 
+            typeof inputs !== 'undefined' ? inputs.userEmail : ''
+          %>">
           <br>
           <label for="user-email" id="user-email-error" style="color: red;">
             <%= typeof errors !== 'undefined' ? errors.userEmail : '' %>
@@ -39,9 +44,11 @@
       
           <!-- User password input -->
           <label for="user-pass">Password</label><br>
-          <input type="text" id="user-pass" name="userPass" class="registration-input" value="<% %>">
+          <input type="text" id="user-pass" name="userPass" class="registration-input" value="<%= 
+            typeof inputs !== 'undefined' ? inputs.userPass : ''
+          %>">
           <br>
-          <label for="ser-pass" id="user-pass-error" style="color: red;">
+          <label for="user-pass" id="user-pass-error" style="color: red;">
             <%= typeof errors !== 'undefined' ? errors.userPass : '' %>
           </label>
           <section id="password-requirements">
@@ -57,7 +64,9 @@
       
           <!-- User password input -->  
           <label for="pass-conf">Confirm password</label><br>
-          <input type="text" id="pass-conf" name="passConf" class="registration-input" value="<% %>">
+          <input type="text" id="pass-conf" name="passConf" class="registration-input" value="<%= 
+            typeof inputs !== 'undefined' ? inputs.passConf : ''
+          %>">
           <br>
           <label for="pass-conf" id="pass-conf-error" style="color: red;">
             <%= typeof errors !== 'undefined' ? errors.passConf : '' %>
@@ -72,6 +81,7 @@
       <% } %>
 
     </div>
-  </main>
 
+  </main>
+  
 <%- include('../includes/auth-footer.ejs') %>

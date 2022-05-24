@@ -9,6 +9,7 @@ class Registration {
   #userEmail;
   #userPass;
   #passConf;
+
   // public fields
   isFormValid = true;
   errors = {
@@ -16,25 +17,18 @@ class Registration {
     userEmail: '',
     userPass: '',
     passConf: ''
-  }
+  };
 
   constructor() {
     this.database = new Database();
   }
 
-  setUserData(userName, userEmail, userPass, passConf) {
-    this.#userName = userName;
-    this.#userEmail = userEmail;
-    this.#userPass = userPass;
-    this.#passConf = passConf;
+  setUserData(formData) {
+    this.#userName = formData.userName;
+    this.#userEmail = formData.userEmail;
+    this.#userPass = formData.userPass;
+    this.#passConf = formData.passConf;
   }
-
-  // getUserName(userName, callback) {
-  //   const query = "SELECT user_name FROM registrated_users WHERE user_name = ?";
-  //   this.database.query(query, userName)
-  //   .then(result => callback(result))
-  //   .catch(error => callback(error));
-  // }
 
   getUserName(userName) {
     const query = "SELECT user_name FROM registrated_users WHERE user_name = ?";
@@ -45,13 +39,6 @@ class Registration {
       });
     });
   }
-
-  // getUserEmail(userEmail, callback) {
-  //   const query = "SELECT user_email FROM registrated_users WHERE user_email = ?";
-  //   this.database.query(query, userEmail)
-  //   .then(result => callback(result));
-  //   .catch(error => callback(error));
-  // }
 
   getUserEmail(userEmail) {
     const query = "SELECT user_email FROM registrated_users WHERE user_email = ?";
@@ -91,6 +78,7 @@ class Registration {
   passValidation() {
     try {
       if (this.#userPass.length === 0) throw 'Please enter a password.';
+      if (this.#userPass.length < 3) throw 'Password does not meet requirements.';
       if (/[^\w]/.test(this.#userPass)) throw 'Password does not meet requirements.';
     } catch (error) {
       this.errors.userPass = error;

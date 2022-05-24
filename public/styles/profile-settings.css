@@ -1,0 +1,69 @@
+section {
+  margin: auto;
+  width: 75%;
+  min-width: 750px;
+  background-color: rgba(149, 224, 224, 0.562);
+}
+
+  .info-personal-avatar {
+    position: relative;
+    float: left;
+    width: 225px;
+    height: 225px;
+    margin: 25px;
+    border: 2px dashed gray;
+  }
+
+    .info-personal-avatar img{
+      position: absolute;
+      width: 100%;
+    }
+
+    .info-personal-avatar form{
+      position: absolute;
+      width: 100%;
+    }
+
+  .info-personal {
+    width: 500px;
+    float: left;
+    margin: 25px;
+  }
+
+    .info-personal-user {
+      background-color: coral;
+    }
+
+    .info-personal-security {
+      margin-top: 20px;
+      background-color: chartreuse;
+    }
+
+    .info-personal-data {
+      margin-top: 20px;
+      background-color: dodgerblue;
+    }
+
+      .info-personal-wrapper {
+        margin: auto;
+        width: 450px;
+        background-color: hotpink;
+        border-bottom: 1px solid gray;
+      }
+
+        .info-cell-icon {
+          float: left;
+        }
+
+          .info-cell-icon img{
+            width: 60px;
+            height: 60px;
+          }
+
+        .info-cell-value {
+          float: left;
+        }
+
+        .info-cell-edit {
+          float: left;
+        }

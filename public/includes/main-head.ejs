@@ -13,8 +13,30 @@
 <body>
   <nav>
     <header>
-      <a href="/"><button>Playfab</button></a>
-      <a href="/login"><button>Sign in</button></a>
-      <a href="/registration"><button>Sign up</button></a>
+
+      <% if (typeof isAuthenticated !== 'undefined' && isAuthenticated) { %>
+
+        <img src=">" alt="profile avatar" class="profile-avatar">
+        <!-- <select name="profileDopdown" id="profile-dopdown" onchange="location = this.value;">
+          <option hidden><%= //user.name %></option>
+          <option value="/logout">Sign out</option>
+          <a href="/profile-settings">Settings</a> -->
+          <!-- <option value="/profile-settings">Settings</option> -->
+        </select>
+        
+        <p><%= user.name %></p>
+        <a href="/profile-settings"><button>Settings</button></a>
+        <form action="/logout" method="POST">
+          <button type="submit">Sign out</button>
+        </form>
+
+      <% } else { %>
+
+        <a href="/"><button>Playfab</button></a>
+        <a href="/login"><button>Sign in</button></a>
+        <a href="/registration"><button>Sign up</button></a>
+      
+      <% } %>
+
     </header>
   </nav>
