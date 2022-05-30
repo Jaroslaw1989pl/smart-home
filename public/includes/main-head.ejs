@@ -16,16 +16,12 @@
 
       <% if (typeof isAuthenticated !== 'undefined' && isAuthenticated) { %>
 
-        <img src=">" alt="profile avatar" class="profile-avatar">
-        <!-- <select name="profileDopdown" id="profile-dopdown" onchange="location = this.value;">
-          <option hidden><%= //user.name %></option>
-          <option value="/logout">Sign out</option>
-          <a href="/profile-settings">Settings</a> -->
-          <!-- <option value="/profile-settings">Settings</option> -->
-        </select>
+        <img src="<%= user.avatar %>" alt="profile avatar" class="profile-avatar">
         
         <p><%= user.name %></p>
+
         <a href="/profile-settings"><button>Settings</button></a>
+
         <form action="/logout" method="POST">
           <button type="submit">Sign out</button>
         </form>
@@ -39,4 +35,13 @@
       <% } %>
 
     </header>
+
   </nav>
+
+  <div class="flash-message">
+    <% if (typeof flash !== 'undefined' && typeof flash.success !== 'undefined') { %>
+      <div class="message-success"><%= flash.success %></div>
+    <% } else if (typeof flash !== 'undefined' && typeof flash.error !== 'undefined') { %>
+      <div class="message-error"><%= flash.error %></div>
+    <% } %>
+  </div>

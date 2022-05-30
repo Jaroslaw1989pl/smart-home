@@ -1,4 +1,4 @@
-// build-in modules
+// 3rd party modules
 const mysql = require('mysql2');
 // custom modules
 const { dbConfig } = require('./config/config');

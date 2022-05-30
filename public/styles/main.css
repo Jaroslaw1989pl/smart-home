@@ -8,3 +8,27 @@ body {
     width: 100%;
     background-color: #3377FF;
   }
+
+    .profile-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+  .flash-message {
+
+  }
+
+    .message-success {
+      border: 2px solid #008000;
+      border-radius: 5px;
+      background-color: #27e250;
+      color: #058f00;
+    }
+
+    .message-error {
+      border: 2px solid #e6421a;
+      border-radius: 5px;
+      background-color: #e27227;
+      color: #8f1d00;
+    }

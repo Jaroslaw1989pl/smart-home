@@ -1,4 +1,4 @@
-// build-in modules
+// 3rd party modules
 const bcrypt = require('bcryptjs');
 // custom modules
 const Registration = require('../models/auth-registration-model');
@@ -77,7 +77,7 @@ exports.registration = (request, response, next) => {
         formData.userPass = hashedPass;
         const user = new User();
         user.addSpace(formData.userName);
-        /*return*/ user.add(formData);
+        /*return*/ user.addUser(formData);
       })
       .then(() => {
         request.session.isRegistrationCompleted = true;
@@ -114,19 +114,21 @@ exports.login = (request, response, next) => {
         request.session.inputs = formData;
         response.redirect('/login');
       } else {
+        const user = new User();
         bcrypt.compare(formData.userPass, result[0].user_password)
         .then(match => {
           if (match) {
-            const user = new User();
-            user.set(result[0]);
-            request.session.user = user.get();
-            request.session.isLoggedIn = true;
-            response.redirect('/');
+            return user.getUser(result[0].user_id);
           } else {
             request.session.errors = 'Invalid username or password.';
             request.session.inputs = formData;
             response.redirect('/login');
           }
+        })
+        .then(result => {
+          request.session.user = user.setUser(result[0]);
+          request.session.isLoggedIn = true;
+          response.redirect('/');
         })
         .catch(error => console.log(error));
       }
@@ -191,10 +193,11 @@ exports.delete = (request, response, next) => {
             if (match) {
               // correct password
               const user = new User();
-              user.delete(response.locals.user.id)
-              user.deleteSpace(response.locals.user.name);
-              form.deleteCode();
-              request.session.destroy();
+              // user.deleteUser(response.locals.user.id)
+              // user.deleteSpace(response.locals.user.name);
+              // form.deleteCode();
+              // request.session.destroy();
+              request.session.flash = {success: 'Profile deleted.'};
               response.redirect('/');
             } else {
               request.session.errors = {password: 'Incorrect password.'};

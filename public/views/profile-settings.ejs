@@ -10,11 +10,13 @@
       <h1>ACCOUNT MENAGEMENT</h1>
       <!-- user personal avatar -->
       <div class="info-personal-avatar">
-        <img src="<%= %>" alt="profile avatar">
+        <img src="<%= user.avatar %>" alt="profile avatar">
         <form action="/profile-avatar" method="POST" enctype="multipart/form-data">
-          <input type="file" name="avatar" id="img-input">
+          <input type="file" name="image" id="img-input">
           <input type="submit" name="img-submit-btn" value="Upload">
-          <label for="info-personal-avatar" id="avatar-error" style="color: red;"><%= %></label>
+          <label for="info-personal-avatar" id="image-error" style="color: red;">
+            <%= typeof errors !== 'undefined' ? errors : '' %>
+          </label>
         </form>
       </div>
     
@@ -26,10 +28,10 @@
               <img src="" alt="info-cell-icon">
             </div>
             <div class="info-cell-value">
-              <h3><%= %></h3>
+              <h3><%= user.name %></h3>
             </div>
             <div class="info-cell-edit">
-              <a href="/profile/settings/change-username">Change</a>
+              <a href="/profile-name">Change</a>
             </div>
             <div style="clear: both;"></div>
           </div>

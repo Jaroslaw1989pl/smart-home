@@ -27,6 +27,7 @@ router.route('/new-password').get().post(auth.newPassword);
 // user profile routes - protected routes
 router.route('/profile-settings').get(protected, views.profileSettings).post();
 router.route('/profile-avatar').get().post(settings.profileAvatar);
+router.route('/profile-name').get(protected, views.profileName).post(settings.profileName);
 
 router.route('/profile-delete').get(protected, views.profileDelete).post(auth.delete);
 

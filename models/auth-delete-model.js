@@ -1,5 +1,5 @@
 // custom modules
-const Database = require('./../app/database.class');
+const Database = require('./../app/database');
 const Email = require('./email-model');
 
 class DeleteUser {

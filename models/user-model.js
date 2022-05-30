@@ -1,25 +1,18 @@
 // bult-in modules
 const fs = require('fs');
 // custom modules
-const Database = require('./../app/database.class');
+const Database = require('../app/database');
 
 class User {
-
-  #id;
-  #name;
-  #nameUpdate;
-  #email;
-  #emailUpdate;
-  #passwordUpdate;
 
   constructor() {
     this.database = new Database();
   }
 
-  add(formData) {
+  addUser(formData) {
 
-    let query = "INSERT INTO registrated_users (user_name, name_update, user_email, email_update, user_password, password_update) VALUES (?, ?, ?, ?, ?, ?)";
-    
+    let query = `INSERT INTO registrated_users (user_name, name_update, user_email, email_update, user_password, password_update) 
+                 VALUES (?, ?, ?, ?, ?, ?)`;
     let values = [
       formData.userName,
       parseInt(Date.now() / 1000),
@@ -28,11 +21,25 @@ class User {
       formData.userPass,
       parseInt(Date.now() / 1000),
     ];
-    
     return new Promise((resolve, reject) => {
+      // adding new user to database
       this.database.connection.query(query, values, (error, result, fields) => {
         if (error) reject(error);
-        else resolve(result);
+        else {
+          // getting new user id
+          let query = `SELECT user_id FROM registrated_users WHERE user_name = ?`;
+          this.database.connection.query(query, formData.userName, (error, result, fields) => {
+            if (error) reject(error);
+            else {
+              // adding new user to other tables
+              let query = `INSERT INTO users_profiles (user_id) VALUES (?)`;
+              this.database.connection.query(query, result[0].user_id, (error, result, fields) => {
+                if (error) reject(error);
+                else resolve(result);
+              });
+            }
+          });
+        }
       });
     });
   }
@@ -43,27 +50,32 @@ class User {
     }
   }
 
-  set(userData) {
-    this.#id = userData.user_id;
-    this.#name = userData.user_name;
-    this.#nameUpdate = userData.name_update;
-    this.#email = userData.user_email;
-    this.#emailUpdate = userData.email_update;
-    this.#passwordUpdate = userData.password_update;
+  getUser(userId) {
+    const query = `SELECT * FROM registrated_users, users_profiles WHERE registrated_users.user_id = ? AND users_profiles.user_id = ?`;
+    const values = [userId, userId];
+    return new Promise((resolve, reject) => {
+      this.database.connection.query(query, values, (error, result, fields) => {
+        if (error) reject(error);
+        else resolve(result);
+      });
+    });
   }
 
-  get() {
+  setUser(userData) {
     return {
-      id: this.#id,
-      name: this.#name,
-      nameUpdate: this.#nameUpdate,
-      email: this.#email,
-      emailUpdate: this.#emailUpdate,
-      passwordUpdate: this.#passwordUpdate
+      id: userData.user_id,
+      name: userData.user_name,
+      nameUpdate: userData.name_update,
+      email: userData.user_email,
+      emailUpdate: userData.email_update,
+      passwordUpdate: userData.password_update,
+      avatar: userData.avatar,
+      birthday: userData.birthday,
+      gold: userData.gold
     };
   }
 
-  delete(id) {
+  deleteUser(id) {
     const query = "DELETE FROM registrated_users WHERE user_id = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, id, (error, result) => {

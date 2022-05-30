@@ -109,14 +109,28 @@ exports.newPassword = (request, response, next) => {
 
 /*** USER PROFILE ***/
 
+exports.profileName = (request, response, next) => {
+  let data = {
+    html: {
+      title: 'Playfab | Change name'
+    }
+  };
+
+  response.render('profile-name.ejs', data);
+};
+
 /*** USER PROFILE SETTINGS ***/
 
 exports.profileSettings = (request, response, next) => {
   let data = {
     html: {
       title: 'Playfab | Profile settings'
-    }
+    },
+    errors: request.session.errors
   };
+
+  request.session.errors = undefined;
+
   response.render('profile-settings.ejs', data);
 };
 
@@ -138,7 +152,7 @@ exports.profileDelete = (request, response, next) => {
 
       request.session.isCodeCorrect = undefined;
       
-      // response.render('profile-delete.ejs', data);
+      response.render('profile-delete.ejs', data);
 
     } else {
       let data = {
@@ -154,9 +168,8 @@ exports.profileDelete = (request, response, next) => {
       request.session.inputs = undefined;
       request.session.errors = undefined;
 
-      // response.render('profile-delete.ejs', data);
+      response.render('profile-delete.ejs', data);
     }
-    response.render('profile-delete.ejs', data);
   })
   .catch(error => console.log('profile delete form', error));
 };
