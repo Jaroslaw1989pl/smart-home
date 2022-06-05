@@ -1,5 +1,5 @@
 // custom modules
-const Database = require('../app/database');
+const Database = require('./../app/database.class');
 
 
 class Login {

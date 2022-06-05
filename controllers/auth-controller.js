@@ -1,12 +1,12 @@
 // 3rd party modules
 const bcrypt = require('bcryptjs');
 // custom modules
-const Registration = require('../models/auth-registration-model');
-const Login = require('../models/auth-login-model');
-const User = require('./../models/user-model');
-const ResetPassword = require('./../models/auth-reset-password-model');
-const NewPassword = require('../models/auth-new-password-model');
-const DeleteUser = require('../models/auth-delete-model');
+const Registration = require('./../models/auth-registration.class');
+const Login = require('./../models/auth-login.class');
+const User = require('./../models/user.class');
+const ResetPassword = require('./../models/auth-reset-password.class');
+const NewPassword = require('./../models/auth-new-password.class');
+const DeleteUser = require('./../models/auth-delete.class');
 
 
 /*** USER REGISTRATION ***/
@@ -114,21 +114,22 @@ exports.login = (request, response, next) => {
         request.session.inputs = formData;
         response.redirect('/login');
       } else {
-        const user = new User();
         bcrypt.compare(formData.userPass, result[0].user_password)
         .then(match => {
           if (match) {
-            return user.getUser(result[0].user_id);
+            const user = new User();
+            user.getUser(result[0].user_id)
+            .then(result => {
+              request.session.user = user.setUser(result[0]);
+              request.session.isLoggedIn = true;
+              response.redirect('/');
+            })
+            .catch(error => console.log(error));
           } else {
             request.session.errors = 'Invalid username or password.';
             request.session.inputs = formData;
             response.redirect('/login');
           }
-        })
-        .then(result => {
-          request.session.user = user.setUser(result[0]);
-          request.session.isLoggedIn = true;
-          response.redirect('/');
         })
         .catch(error => console.log(error));
       }
@@ -193,11 +194,14 @@ exports.delete = (request, response, next) => {
             if (match) {
               // correct password
               const user = new User();
-              // user.deleteUser(response.locals.user.id)
-              // user.deleteSpace(response.locals.user.name);
-              // form.deleteCode();
-              // request.session.destroy();
+              user.deleteUser(response.locals.user.id);
+              user.deleteSpace(response.locals.user.name);
+              user.deleteAvatar(response.locals.user.avatar);
+              form.deleteCode();
               request.session.flash = {success: 'Profile deleted.'};
+              request.session.user = undefined;
+              request.session.isLoggedIn = undefined;
+              request.session.isCodeCorrect = undefined;
               response.redirect('/');
             } else {
               request.session.errors = {password: 'Incorrect password.'};

@@ -1,7 +1,7 @@
 // bult-in modules
 const fs = require('fs');
 // custom modules
-const Database = require('../app/database');
+const Database = require('./../app/database.class');
 
 class User {
 
@@ -10,8 +10,7 @@ class User {
   }
 
   addUser(formData) {
-
-    let query = `INSERT INTO registrated_users (user_name, name_update, user_email, email_update, user_password, password_update) 
+    const query = `INSERT INTO registrated_users (user_name, name_update, user_email, email_update, user_password, password_update) 
                  VALUES (?, ?, ?, ?, ?, ?)`;
     let values = [
       formData.userName,
@@ -27,13 +26,14 @@ class User {
         if (error) reject(error);
         else {
           // getting new user id
-          let query = `SELECT user_id FROM registrated_users WHERE user_name = ?`;
+          const query = `SELECT user_id FROM registrated_users WHERE user_name = ?`;
           this.database.connection.query(query, formData.userName, (error, result, fields) => {
             if (error) reject(error);
             else {
               // adding new user to other tables
-              let query = `INSERT INTO users_profiles (user_id) VALUES (?)`;
-              this.database.connection.query(query, result[0].user_id, (error, result, fields) => {
+              const query = `INSERT INTO users_profiles (user_id, gold) VALUES (?, ?)`;
+              let values = [result[0].user_id, 100];
+              this.database.connection.query(query, values, (error, result, fields) => {
                 if (error) reject(error);
                 else resolve(result);
               });
@@ -76,11 +76,17 @@ class User {
   }
 
   deleteUser(id) {
-    const query = "DELETE FROM registrated_users WHERE user_id = ?";
     return new Promise((resolve, reject) => {
-      this.database.connection.query(query, id, (error, result) => {
+      const query = "DELETE FROM users_profiles WHERE user_id = ?";
+      this.database.connection.query(query, id, (error, result, fields) => {
         if (error) reject(error);
-        else resolve(result);
+        else {
+          const query = "DELETE FROM registrated_users WHERE user_id = ?";
+          this.database.connection.query(query, id, (error, result, fields) => {
+            if (error) reject(error);
+            else resolve(result);
+          });
+        }
       });
     });
   }
@@ -88,6 +94,12 @@ class User {
   deleteSpace(name) {
     if (fs.existsSync('spaces/' + name)) {
       fs.rm('spaces/' + name, { recursive: true}, error => console.log(error));
+    }
+  }
+
+  deleteAvatar(avatar) {
+    if (fs.existsSync('public/' + avatar)) {
+      fs.unlink('public/' + avatar, error => console.log(error));
     }
   }
 }

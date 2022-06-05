@@ -2,6 +2,8 @@
 
 <!-- STYLES -->
 <link rel="stylesheet" href="/styles/profile-settings.css">
+<!-- SCRIPTS -->
+<script src="/scripts/settings.js" defer></script>
 
   <main>
 
@@ -25,7 +27,7 @@
           <!-- Username section -->
           <div class="info-personal-wrapper username">
             <div class="info-cell-icon">
-              <img src="" alt="info-cell-icon">
+              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
             </div>
             <div class="info-cell-value">
               <h3><%= user.name %></h3>
@@ -38,23 +40,23 @@
           <!-- User birthday section -->
           <div class="info-personal-wrapper birthday">
             <div class="info-cell-icon">
-              <img src="" alt="info-cell-icon">
+              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
             </div>
             <div class="info-cell-value">
               <p><%= %></p>
             </div>
             <div class="info-cell-edit">
-            <a href="/profile/settings/user-birthday"><button>Specify</button></a>
+            <a href="/profile-birthday"><button>Specify</button></a>
             </div>
             <div style="clear: both;"></div>
           </div>
           <!-- User location section -->
           <div class="info-personal-wrapper location">
             <div class="info-cell-icon">
-              <img src="" alt="info-cell-icon">
+              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
             </div>
             <div class="info-cell-value">
-              <p id="user-location">Place of residance: </p>
+              <p id="user-location">Place of residance: </p><p id="user-location-info"></p>
             </div>
             <div class="info-cell-edit">
             </div>
@@ -67,21 +69,21 @@
           <!-- User email section -->
           <div class="info-personal-wrapper email">
             <div class="info-cell-icon">
-              <img src="" alt="info-cell-icon">
+              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
             </div>
             <div class="info-cell-value">
-              <p><b><%= %></b></p>
+              <p><b><%= user.email %></b></p>
               <p>Email address added: <%= %></p>
             </div>
             <div class="info-cell-edit">
-              <a href="/profile/settings/user-email">Change</a>
+              <a href="/profile-email">Change</a>
             </div>
             <div style="clear: both;"></div>
           </div>
           <!-- User password section -->
           <div class="info-personal-wrapper">
             <div class="info-cell-icon">
-              <img src="" alt="info-cell-icon">
+              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
             </div>
             <div class="info-cell-value">
               <p>Password added: <%= %></p>
@@ -98,7 +100,7 @@
           <!-- User delete section -->
           <div class="info-personal-wrapper data">
             <div class="info-cell-icon">
-              <img src="" alt="info-cell-icon">
+              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
             </div>
             <div class="info-cell-value">
               <p>Delete <b><%= %></b> user account</p>

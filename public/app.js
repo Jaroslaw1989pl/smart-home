@@ -2,7 +2,7 @@
 const express = require('express');
 const session = require('express-session');
 // custom modules
-const config = require('../app/config/config');
+const config = require('./../app/config/config');
 
 
 const app = express();
@@ -20,6 +20,7 @@ app.use(session({secret: '', name: 'sessionId', resave: false, saveUninitialized
 
 // setting up local variables passed to all views
 app.use((request, response, next) => {
+  console.log(request.session);
   response.locals.isAuthenticated = request.session.isLoggedIn;
   response.locals.user = request.session.user;
   response.locals.flash = request.session.flash;

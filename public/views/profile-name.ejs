@@ -13,31 +13,44 @@
       <h1>CHANGE USERNAME</h1>
     </header>
 
-    <label for="username-form" id="form-error" style="color: red;"><%= %></label>
+    <% if (!isUpdateAvailable) { %>
 
-    <form id="username-form" name="username-form" action="/profile-name" method="POST">
-      
-      <p>You can change your username displayed in the game and on playfab.pl websites. Username change is available once every 14 days.</p>       
-      <!-- User name input -->
-      <label for="user-name">1. Enter a new username:</label><br>
-      <input type="text" id="user-name" name="userName" class="registration-input" value="<%= %>">
-      <br><label for="user-name" id="user-name-error" style="color: red;"><%= %></label>
-      <br>
+      <label for="username-form" id="form-error" style="color: red;"><%= %>You have wait 14 days before next user name updte.</label>
 
-      <!-- User payment input -->
-      <label for="price-accept">2. Accept a payment method:</label><br>
-      <p>Price: 100 gold</p>
-      <p>Your gold: <%= user.gold %></p>
-      <% if (user.gold < 100) { %>
-        <p style="color:red">You do not have enough gold</p>
-      <% } else { %>
-        <p>It will remain in your account <%= user.gold - 100 %></p>
-        <input type="checkbox" id="price-accept" name="priceAccept" class="registration-input">
+    <% } else { %>
+
+      <form id="username-form" name="username-form" action="/profile-name" method="POST">
+        
+        <p>You can change your username displayed in the game and on playfab.pl websites. Username change is available once every 14 days.</p>       
+        <!-- User name input -->
+        <label for="user-name">1. Enter a new username:</label><br>
+        <input type="text" id="user-name" name="userName" class="registration-input" value="<%= 
+          typeof inputs !== 'undefined' ? inputs.userName : ''
+        %>">
+        <br><label for="user-name" id="user-name-error" style="color: red;">
+          <%= typeof errors !== 'undefined' ? errors.userName : '' %>
+        </label>
         <br>
-        <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Change" >
-      <% } %>
 
-    </form>
+        <!-- User payment input -->
+        <label for="price-accept">2. Accept a payment method:</label><br>
+        <p>Price: 100 gold</p>
+        <p>Your gold: <%= user.gold %></p>
+        <% if (user.gold < 100) { %>
+          <p style="color:red">You do not have enough gold</p>
+        <% } else { %>
+          <p>It will remain in your account <%= user.gold - 100 %></p>
+          <input type="checkbox" id="price-accept" name="isPriceAccepted" class="registration-input">
+          <br><label for="price-accept" id="price-accept-error" style="color: red;">
+            <%= typeof errors !== 'undefined' ? errors.price : '' %>
+          </label>
+          <br>
+          <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Change" >
+        <% } %>
+
+      </form>
+
+    <% } %>
 
   </main>
   

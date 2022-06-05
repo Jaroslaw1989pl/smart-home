@@ -1,6 +1,7 @@
 // custom modules
-const DeleteUser = require('../models/auth-delete-model');
-const NewPassword = require('../models/auth-new-password-model');
+const SettingsName = require('../models/settings-name.class');
+const DeleteUser = require('./../models/auth-delete.class');
+const NewPassword = require('./../models/auth-new-password.class');
 
 
 /*** PUBLIC VIEWS ***/
@@ -109,15 +110,6 @@ exports.newPassword = (request, response, next) => {
 
 /*** USER PROFILE ***/
 
-exports.profileName = (request, response, next) => {
-  let data = {
-    html: {
-      title: 'Playfab | Change name'
-    }
-  };
-
-  response.render('profile-name.ejs', data);
-};
 
 /*** USER PROFILE SETTINGS ***/
 
@@ -128,10 +120,54 @@ exports.profileSettings = (request, response, next) => {
     },
     errors: request.session.errors
   };
-
+  
   request.session.errors = undefined;
-
+  
   response.render('profile-settings.ejs', data);
+};
+
+exports.profileName = (request, response, next) => {
+  const form = new SettingsName();
+
+  form.getLastUpdate(response.locals.user.id)
+  .then(result => {
+    let data = {
+      html: {
+        title: 'Playfab | Change name'
+      },
+      isUpdateAvailable: result[0].name_update + 60/*3600000 * 24 * 14*/ > parseInt(Date.now() / 1000) ? false : true,
+      inputs: request.session.inputs,
+      errors: request.session.errors
+    };
+    
+    request.session.inputs = undefined;
+    request.session.errors = undefined;
+  
+    response.render('profile-name.ejs', data);
+  })
+  .catch(error => console.log(error));
+};
+
+exports.profileBirthday = (request, response, next) => {
+  let data = {
+    html: {
+      title: 'Playfab | User birthday'
+    }
+  };
+  // NIE DOKOŃCZONE!!!
+  response.render('profile-birthday.ejs', data);
+};
+
+exports.profileEmail = (request, response, next) => {
+  // 1. Sprawdzenie czy upłynęło 14 dni od ostatniej aktualizacji
+  // 2. sprawdzenie czy kod został wysłany (czy istnieje w bazie danych)
+  let data = {
+    html: {
+      title: 'Playfab | User email'
+    }
+  };
+  
+  response.render('profile-email.ejs', data);
 };
 
 /*** USER PROFILE DELETE ***/

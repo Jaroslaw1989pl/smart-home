@@ -3,7 +3,7 @@ const dotEnv = require('dotenv').config();
 const path = require('path');
 
 
-exports.port = 3001;
+exports.port = 3002;
 
 exports.dbConfig = {
   'db_host': process.env.DB_HOST,

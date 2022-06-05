@@ -28,6 +28,8 @@ router.route('/new-password').get().post(auth.newPassword);
 router.route('/profile-settings').get(protected, views.profileSettings).post();
 router.route('/profile-avatar').get().post(settings.profileAvatar);
 router.route('/profile-name').get(protected, views.profileName).post(settings.profileName);
+router.route('/profile-birthday').get(protected, views.profileBirthday).post(settings.profileBirthday);
+router.route('/profile-email').get(protected, views.profileEmail).post(settings.profileEmail);
 
 router.route('/profile-delete').get(protected, views.profileDelete).post(auth.delete);
 

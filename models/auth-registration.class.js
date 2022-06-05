@@ -1,5 +1,5 @@
 // custom modules
-const Database = require('./../app/database');
+const Database = require('./../app/database.class');
 
 
 class Registration {
@@ -53,9 +53,9 @@ class Registration {
   nameValidation() {
     try {
       if (this.#userName.length === 0) throw 'Please enter your user name.';
-      if (/[^\w]/.test(this.#userName)) throw 'The username can only contain Latin letters, numbers and underscore.';
-      if (this.#userName.length < 3) throw 'The username should be at least 3 characters long.';
-      if (this.#userName.length > 24) throw 'The username should not exceed 24 characters.';    
+      else if (/[^\w]/.test(this.#userName)) throw 'The username can only contain Latin letters, numbers and underscore.';
+      else if (this.#userName.length < 3) throw 'The username should be at least 3 characters long.';
+      else if (this.#userName.length > 24) throw 'The username should not exceed 24 characters.';    
     } catch (error) {
       this.errors.userName = error;
       this.isFormValid = false;
@@ -68,7 +68,7 @@ class Registration {
 
     try {
       if (this.#userEmail.length === 0) throw 'Please enter your email address.';
-      if (!emailRegex.test(this.#userEmail)) throw 'That\'s an invalid email.';
+      else if (!emailRegex.test(this.#userEmail)) throw 'That\'s an invalid email.';
     } catch (error) {
       this.errors.userEmail = error;
       this.isFormValid = false;
@@ -78,8 +78,8 @@ class Registration {
   passValidation() {
     try {
       if (this.#userPass.length === 0) throw 'Please enter a password.';
-      if (this.#userPass.length < 3) throw 'Password does not meet requirements.';
-      if (/[^\w]/.test(this.#userPass)) throw 'Password does not meet requirements.';
+      else if (this.#userPass.length < 3) throw 'Password does not meet requirements.';
+      else if (/[^\w]/.test(this.#userPass)) throw 'Password does not meet requirements.';
     } catch (error) {
       this.errors.userPass = error;
       this.isFormValid = false;
@@ -89,7 +89,7 @@ class Registration {
   passConfirmation() {
     try {
       if (this.#passConf.length === 0) throw 'Please confirm the password.';
-      if (this.#passConf !== this.#userPass) throw 'Passwords are not the same.';
+      else if (this.#passConf !== this.#userPass) throw 'Passwords are not the same.';
     } catch (error) {
       this.errors.passConf = error;
       this.isFormValid = false;

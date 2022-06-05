@@ -1,0 +1,53 @@
+<%- include('../includes/main-head.ejs') %>
+
+<!-- SCRIPTS -->
+<!-- <script src="/static/scripts/auth-delete-validation.js" defer></script> -->
+
+  <main>
+
+    <a href="/profile-settings"><- Account Management</a>
+
+    <header>
+      <h1>EMAIL UPDATE</h1>
+    </header>
+
+    <p>To change the email address, click Send email. An email code will be sent to your email address.</p>
+    <p>Please follow below steps:</p>
+
+
+    
+    <% if (typeof isEmailSent !== 'undefined' && isEmailSent) { %>
+      
+      <!-- FORM 1 COMPLETE -->
+
+      <header style="background-color: orange;">
+        <p><b>1. Confirmation code was sent to email: <%= user.email %></b></p>
+        <p>To continue, enter the confirmation code. The code is valid for 1 hour. If you do not enter the code, you will not be able to update the email address.</p>
+      </header>
+
+    <% } else { %>
+
+      <!-- FORM 1 -->
+      
+      <form name="email-form" action="/profile-delete" method="POST" style="background-color: orange;">
+
+        <header>
+          <p><b>1. Generete code</b></p>
+          <p>To delete account, click Send email. The code will be sent to your email address.</p>
+        </header>
+
+        <!-- new email input -->
+        <label for="new-email">New email address</label><br>
+        <input type="text" id="user-email" name="newEmail" class="registration-input" value="<% %>">
+        <br><label for="new-email" id="user-email-error" style="color: red;"><% %></label>
+        <br>
+
+        <input type="submit" id="email-submit-btn" name="emailSubmitBtn" value="Send email">
+        
+      </form>
+
+    <% } %>
+
+  </main>
+  
+<%- include('../includes/main-footer.ejs') %>

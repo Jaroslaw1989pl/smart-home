@@ -6,7 +6,7 @@ class Email {
 
   // private fields
   #service = 'gmail;'
-  #user = '';
+  #user = '@gmail.com';
   #pass = '';
 
   // protected fields
