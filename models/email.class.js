@@ -6,8 +6,8 @@ class Email {
 
   // private fields
   #service = 'gmail;'
-  #user = 'dzidajaroslaw@gmail.com';
-  #pass = 'kodpin89081011211';
+  #user = '@gmail.com';
+  #pass = '';
 
   // protected fields
   _transporter;
