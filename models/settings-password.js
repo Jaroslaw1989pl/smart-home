@@ -2,31 +2,33 @@
 const Database = require('../app/database.class');
 const Email = require('./email.class');
 
-class EmailUpdate {
+class PasswordUpdate {
 
   // private fields
   #userId;
-  #oldEmail;
-  #newEmail;
+  #userEmail;
   #code;
+  #newPass;
+  #newPassConf;
   #userPass;
 
   // public fields
   isFormValid = true;
   errors = {
     code: '',
-    newEmail: '',
+    newPass: '',
+    newPassConf: '',
     password: ''
   };
 
   constructor(user) {
     this.database = new Database();
     this.#userId = user.id;
-    this.#oldEmail = user.email;
+    this.#userEmail = user.email;
   }
 
   getLastUpdate() {
-    const query = "SELECT email_update FROM registrated_users WHERE user_id = ?";
+    const query = "SELECT password_update FROM registrated_users WHERE user_id = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.#userId, (error, result, fields) => {
         if (error) reject(error);
@@ -36,9 +38,9 @@ class EmailUpdate {
   }
 
   checkStep() {
-    const query = "SELECT * FROM reset_email WHERE old_email = ?";
+    const query = "SELECT * FROM reset_password WHERE user_id = ?";
     return new Promise((resolve, reject) => {
-      this.database.connection.query(query, this.#oldEmail, (error, result, felds) => {
+      this.database.connection.query(query, this.#userId, (error, result, felds) => {
         if (error) reject(error);
         else resolve(result);
       });
@@ -50,9 +52,9 @@ class EmailUpdate {
   }
 
   saveCode() {
-    const query = "INSERT INTO reset_email (old_email, code, expire_date) VALUES (?, ?, ?)";
+    const query = "INSERT INTO reset_password (user_id, code, expire_date) VALUES (?, ?, ?)";
     let values = [
-      this.#oldEmail,
+      this.#userId,
       this.#code,
       parseInt((Date.now() + 3600000) / 1000)
     ];
@@ -65,9 +67,9 @@ class EmailUpdate {
   }
 
   deleteCode() {
-    const query = "DELETE FROM reset_email WHERE old_email = ?";
+    const query = "DELETE FROM reset_password WHERE user_id = ?";
     return new Promise((resolve, reject) => {
-      this.database.connection.query(query, this.#oldEmail, (error, result, fields) => {
+      this.database.connection.query(query, this.#userId, (error, result, fields) => {
         if (error) reject(error);
         else resolve('Code deleted');
       });
@@ -78,13 +80,13 @@ class EmailUpdate {
     const subject = 'Email change verification code';
     const message = `<p>Use this code: ${this.#code} to confirm your identity.</p>`;
     const email = new Email();
-    email.send(this.#oldEmail, subject, message);
+    email.send(this.#userEmail, subject, message);
   }
 
   validateCode() {
     try {
       if (this.#code.length !== 5) throw 'Confirmation code must contain 5 digits.';
-      else return true;
+      return true;
     } catch (error) {
       this.errors.code = error;
       return false;
@@ -92,8 +94,8 @@ class EmailUpdate {
   }
 
   findCode() {
-    const query = "SELECT * FROM reset_email WHERE old_email = ? AND code = ?";
-    let values = [this.#oldEmail, this.#code];
+    const query = "SELECT * FROM reset_password WHERE user_id = ? AND code = ?";
+    let values = [this.#userId, this.#code];
     return new Promise((resolve, reject) => {
       if (this.validateCode()) {
         this.database.connection.query(query, values, (error, result, felds) => {
@@ -106,34 +108,32 @@ class EmailUpdate {
 
   setFormData(formData) {
     this.#code = formData.code;
-    this.#newEmail = formData.newEmail;
+    this.#newPass = formData.newPass;
+    this.#newPassConf = formData.newPassConf;
     this.#userPass = formData.userPass;
   }
 
-  validateEmail() {
-    const emailRegex = /^([\w]+[.|-]{0,1}[\w]+)+@([\w]+-{0,1}[\w]+\.)+[a-zA-Z]{2,3}$/i;
+  // new password validation
 
+  newPassValidation() {
     try {
-      if (this.#newEmail.length === 0) throw 'Please enter new email address.';
-      else if (!emailRegex.test(this.#newEmail)) throw 'That\'s an invalid email.';
-      else if (this.#newEmail === this.#oldEmail) throw 'New email address can not be the same as actual.'
-      else return true;
+      if (this.#newPass.length === 0) throw 'Please enter a password.';
+      else if (this.#newPass.length < 3) throw 'Password does not meet requirements.';
+      else if (/[^\w]/.test(this.#newPass)) throw 'Password does not meet requirements.';
     } catch (error) {
-      this.errors.newEmail = error;
-      return false;
+      this.errors.newPass = error;
+      this.isFormValid = false;
     }
   }
 
-  findEmail() {
-    const query = "SELECT user_email FROM registrated_users WHERE user_email = ?";
-    return new Promise((resolve, reject) => {
-      if (this.validateEmail()) {
-        this.database.connection.query(query, this.#newEmail, (error, result, fields) => {
-          if (error) reject(error);
-          else resolve(result);
-        });
-      } else resolve(false);
-    });
+  newPassConfirmation() {
+    try {
+      if (this.#newPassConf.length === 0) throw 'Please confirm the password.';
+      else if (this.#newPassConf !== this.#newPass) throw 'Passwords are not the same.';
+    } catch (error) {
+      this.errors.newPassConf = error;
+      this.isFormValid = false;
+    }
   }
 
   validatePassword() {
@@ -141,7 +141,7 @@ class EmailUpdate {
       if (this.#userPass.length === 0) throw 'Please enter a password.';
       else if (this.#userPass.length < 3) throw 'Incorrect password.';
       else if (/[^\w]/.test(this.#userPass)) throw 'Password does not meet requirements.';
-      else return true;
+      return true;
     } catch (error) {
       this.errors.password = error;
       return false;
@@ -160,10 +160,10 @@ class EmailUpdate {
     });
   }
 
-  updateEmail() {
-    const query = "UPDATE registrated_users SET user_email = ?, email_update =? WHERE user_id = ?";
+  updatePassword(hashedPass) {
+    const query = "UPDATE registrated_users SET user_password = ?, password_update = ? WHERE user_id = ?";
     const values = [
-      this.#newEmail,
+      hashedPass,
       parseInt(Date.now() / 1000),
       this.#userId
     ];
@@ -176,4 +176,4 @@ class EmailUpdate {
   }  
 }
 
-module.exports = EmailUpdate;
+module.exports = PasswordUpdate;

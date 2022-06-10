@@ -73,7 +73,7 @@ exports.registration = (request, response, next) => {
     } else {
       // 4. hashing password
       /*return*/ bcrypt.hash(formData.userPass, 12)
-      .then((hashedPass) => {
+      .then(hashedPass => {
         formData.userPass = hashedPass;
         const user = new User();
         user.addSpace(formData.userName);

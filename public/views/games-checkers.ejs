@@ -1,0 +1,27 @@
+<%- include('../includes/game-head.ejs') %>
+  
+  <main>
+
+    <h1>Checkers</h1>
+
+    <% if (typeof isAuthenticated !== 'undefined' && isAuthenticated) { %>
+
+      <form action="/games/checkers-create-player" method="POST">
+        <input type="text" value="<%= user.name %>" hidden>
+        <input type="submit" value="Join">
+      </form>
+
+    <% } else { %>
+            
+      <a href="/login"><button>Sign in</button></a>
+
+      <form action="/games/checkers-create-player" method="POST">
+        <input type="text" value="<%= parseInt(Date.now() / 1000) %>" hidden>
+        <input type="submit" value="Guest">
+      </form>
+        
+    <% } %> 
+
+  </main>
+
+<%- include('../includes/game-footer.ejs') %>

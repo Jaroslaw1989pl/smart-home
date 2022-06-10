@@ -1,0 +1,33 @@
+body {
+
+}
+
+  main {
+    width: 1000px;
+    margin: auto;
+  }
+
+    #platforms-top-bar {
+      text-align: right;
+      background-color: cadetblue;
+    }
+
+    #games-container {
+      background-color: darkkhaki;
+    }
+
+      .game-thumb {
+        width: 200px;
+        background-color: beige;
+      }
+
+        .game-thumb p {
+
+        }
+
+        .game-thumb img {
+          width: 200px;
+        }
+
+
+

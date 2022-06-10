@@ -1,7 +1,7 @@
 // build-in modules
 const fs = require('fs');
 // custom modules
-const Database = require('./../app/database.class');
+const Database = require('../app/database.class');
 
 class NameUpdate {
 

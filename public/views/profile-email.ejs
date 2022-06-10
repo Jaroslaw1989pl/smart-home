@@ -1,7 +1,7 @@
 <%- include('../includes/main-head.ejs') %>
 
 <!-- SCRIPTS -->
-<!-- <script src="/static/scripts/auth-delete-validation.js" defer></script> -->
+<script src="/scripts/auth-registration-form.js" defer></script>
 
   <main>
 
@@ -14,39 +14,77 @@
     <p>To change the email address, click Send email. An email code will be sent to your email address.</p>
     <p>Please follow below steps:</p>
 
+    <% if (!isUpdateAvailable) { %>
 
-    
-    <% if (typeof isEmailSent !== 'undefined' && isEmailSent) { %>
-      
-      <!-- FORM 1 COMPLETE -->
-
-      <header style="background-color: orange;">
-        <p><b>1. Confirmation code was sent to email: <%= user.email %></b></p>
-        <p>To continue, enter the confirmation code. The code is valid for 1 hour. If you do not enter the code, you will not be able to update the email address.</p>
-      </header>
+      <p style="color: red;">Email update is able once for 14 days</p>
 
     <% } else { %>
 
-      <!-- FORM 1 -->
-      
-      <form name="email-form" action="/profile-delete" method="POST" style="background-color: orange;">
-
-        <header>
-          <p><b>1. Generete code</b></p>
-          <p>To delete account, click Send email. The code will be sent to your email address.</p>
-        </header>
-
-        <!-- new email input -->
-        <label for="new-email">New email address</label><br>
-        <input type="text" id="user-email" name="newEmail" class="registration-input" value="<% %>">
-        <br><label for="new-email" id="user-email-error" style="color: red;"><% %></label>
-        <br>
-
-        <input type="submit" id="email-submit-btn" name="emailSubmitBtn" value="Send email">
+      <% if (!isEmailSent) { %>
         
-      </form>
+        <!-- FORM 1 -->
+        
+        <form name="email-form" action="/profile-email" method="POST" style="background-color: orange;">
+          
+          <header>
+            <p><b>1. Generete code</b></p>
+            <p>To change email address, click Send email. The code will be sent to your email address.</p>
+          </header>
+          
+          <input type="submit" id="email-submit-btn" name="emailSubmitBtn" value="Send email">
+          
+        </form>
 
-    <% } %>
+      <% } else { %>
+          
+        <!-- FORM 1 COMPLETE -->
+    
+        <header style="background-color: orange;">
+          <p><b>1. Confirmation code was sent to email: <%= user.email %></b></p>
+          <p>To continue, enter the confirmation code. The code is valid for 1 hour. If you do not enter the code, you will not be able to update the email address.</p>
+        </header>
+  
+        <!-- FORM 2 -->
+
+        <form name="new-email-form" action="/profile-email" method="POST">
+  
+          <!-- verification code -->
+          <label for="code">1. Enter code:</label><br>
+          <input type="text" id="code" name="code" class="registration-input" value="<%= 
+            typeof inputs !== 'undefined' ? inputs.code : ''
+          %>">
+          <br><label for="code" id="code-error" style="color: red;">
+            <%= typeof errors !== 'undefined' ? errors.code : '' %>
+          </label>
+          <br>
+
+          <!-- new email -->
+          <label for="user-email">2. Enter new email address:</label><br>
+          <input type="text" id="user-email" name="newEmail" class="registration-input" value="<%= 
+            typeof inputs !== 'undefined' ? inputs.newEmail : ''
+          %>">
+          <br><label for="user-email" id="user-email-error" style="color: red;">
+            <%= typeof errors !== 'undefined' ? errors.newEmail : '' %>
+          </label>
+          <br>
+
+          <!-- password verification -->
+          <label for="user-pass">3. Confirm password:</label><br>
+          <input type="text" id="user-pass" name="userPass" class="registration-input" value="<%= 
+            typeof inputs !== 'undefined' ? inputs.userPass : ''
+          %>">
+          <br><label for="user-pass" id="user-pass-error" style="color: red;">
+            <%= typeof errors !== 'undefined' ? errors.password : '' %>
+          </label>
+          <br>          
+          
+          <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Update email">
+
+        </form>
+          
+      <% } %>
+      
+    <% } %> 
 
   </main>
   

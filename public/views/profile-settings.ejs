@@ -43,7 +43,7 @@
               <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
             </div>
             <div class="info-cell-value">
-              <p><%= %></p>
+              <p>Birthday: <%= user.birthday || 'Not specified.' %></p>
             </div>
             <div class="info-cell-edit">
             <a href="/profile-birthday"><button>Specify</button></a>
@@ -73,7 +73,7 @@
             </div>
             <div class="info-cell-value">
               <p><b><%= user.email %></b></p>
-              <p>Email address added: <%= %></p>
+              <p>Email address added: <%= new Date(user.emailUpdate * 1000) %></p>
             </div>
             <div class="info-cell-edit">
               <a href="/profile-email">Change</a>
@@ -86,10 +86,10 @@
               <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
             </div>
             <div class="info-cell-value">
-              <p>Password added: <%= %></p>
+              <p>Password added: <%= new Date(user.passwordUpdate * 1000) %></p>
             </div>
             <div class="info-cell-edit">
-              <a href="/profile/settings/user-password">Change</a>
+              <a href="/profile-password">Change</a>
             </div>
             <div style="clear: both;"></div>
           </div>

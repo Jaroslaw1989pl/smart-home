@@ -44,7 +44,7 @@ if (document.getElementById('user-email')) {
 
     try {
       
-      if (userEmailInput.value == '') userEmailParagraph.textContent = '';
+      if (userEmailInput.value == '') userEmailError.textContent = '';
       else if (!emailRegex.test(userEmailInput.value)) throw 'That\'s an invalid email.';
       else if (emailRegex.test(userEmailInput.value)) {
         const xhttp = new XMLHttpRequest();

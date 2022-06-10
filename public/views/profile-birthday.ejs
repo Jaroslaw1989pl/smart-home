@@ -7,32 +7,37 @@
 
   <main>
 
-    <a href="/profile/settings"><- Account Management</a>
+    <a href="/profile-settings"><- Account Management</a>
 
     <header>
       <h1>Birthday</h1>
     </header>
 
-    <label for="birthday-form" id="form-error" style="color: red;"><% %></label>
+    <% if (!isUpdateAvailable) { %>
+      <label for="birthday-form" id="form-error" style="color: red;">You can update your birth date <% %></label>
+    <% } %>
 
     <form name="birthdayForm" action="/profile-birthday" method="POST" id="birthday-form">
       <p></p>       
       <!-- User birthday input -->
       <label for="user-birthday">Set date</label><br>
       <input type="date" name="userBirthday" id="user-birthday">
-      <br><label for="user-birthday" id="birthday-name-error" style="color: red;"><% %></label>
+      <br><label for="user-birthday" id="birthday-name-error" style="color: red;">
+        <%= typeof errors !== 'undefined' ? errors.date : '' %>  
+      </label>
       <br>
 
-      <% %>
+      <% if (isRemoveAvailable) { %>
 
         <p>You can remove your date of birth.</p>
         <input type="submit" id="form-submit-btn" name="delSubmitBtn" value="Remove date of birth" >
 
-      <% %>
+      <% }  
+      if (isUpdateAvailable) { %>
 
         <input type="submit" id="form-submit-btn" name="setSubmitBtn" value="Change" >
         
-      <% %>
+      <% } %>
 
     </form>
 

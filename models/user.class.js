@@ -71,6 +71,7 @@ class User {
       passwordUpdate: userData.password_update,
       avatar: userData.avatar,
       birthday: userData.birthday,
+      birthdayUpdate: userData.birthday_update,
       gold: userData.gold
     };
   }

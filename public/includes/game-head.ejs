@@ -23,17 +23,6 @@
         
         <p><%= user.name %></p>
 
-        <a href="/profile-settings"><button>Settings</button></a>
-
-        <form action="/logout" method="POST">
-          <button type="submit">Sign out</button>
-        </form>
-
-      <% } else { %>
-
-        <a href="/login"><button>Sign in</button></a>
-        <a href="/registration"><button>Sign up</button></a>
-      
       <% } %>
 
     </header>
