@@ -30,24 +30,9 @@
         <br><label for="user-name" id="user-name-error" style="color: red;">
           <%= typeof errors !== 'undefined' ? errors.userName : '' %>
         </label>
-        <br>
-
-        <!-- User payment input -->
-        <label for="price-accept">2. Accept a payment method:</label><br>
-        <p>Price: 100 gold</p>
-        <p>Your gold: <%= user.gold %></p>
-        <% if (user.gold < 100) { %>
-          <p style="color:red">You do not have enough gold</p>
-        <% } else { %>
-          <p>It will remain in your account <%= user.gold - 100 %></p>
-          <input type="checkbox" id="price-accept" name="isPriceAccepted" class="registration-input">
-          <br><label for="price-accept" id="price-accept-error" style="color: red;">
-            <%= typeof errors !== 'undefined' ? errors.price : '' %>
-          </label>
-          <br>
-          <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Change" >
-        <% } %>
-
+        <br>  
+        <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Change" >
+          
       </form>
 
     <% } %>

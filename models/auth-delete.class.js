@@ -101,7 +101,7 @@ class DeleteUser {
   }
 
   verifyPassword() {
-    const query = "SELECT * FROM registrated_users WHERE user_id = ?";
+    const query = "SELECT * FROM users WHERE id = ?";
     return new Promise ((resolve, reject) => {
       this.database.connection.query(query, this.#userId, (error, result, fields) => {
         if (error) reject(error);

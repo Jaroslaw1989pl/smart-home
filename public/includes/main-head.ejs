@@ -7,34 +7,66 @@
   <title><%= html.title %></title>
 
   <!-- STYLES -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato&family=Russo+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles/main.css">
+  <!-- SCRIPTS -->
+  <% if (isAuthenticated) { %>
+    <script src="/scripts/main-actions.js" defer></script>
+  <% } %>
 
 </head>
 <body>
   <nav id="top-bar">
     <header>
 
-      <a href="/"><button>Playfab</button></a>
-      <a href="/games"><button>Games</button></a>
+      <div class="content-left">
 
-      <% if (typeof isAuthenticated !== 'undefined' && isAuthenticated) { %>
+        <a href="/" class=""><img src="/assets/main-icon.png" alt="flavico"></a>
+        <a href="/" class="home-link">Playfab</a>
 
-        <img src="<%= user.avatar %>" alt="profile avatar" class="profile-avatar">
+      </div>
+
+      <div class="content-right<%= isAuthenticated ? ' authenticated' : '' %> ">
+
+        <% if (isAuthenticated) { %>
+
+          <img src="/assets/profile-avatars/<%= user.avatar %>.jpg" alt="profile avatar" class="profile-avatar">
+
+          <a href="" id="dropdown-toggle"><%= user.name %> &#x21B4;</a>
+
+          <div id="user-menu" class="dropdown-menu">
+            
+            <div class="dropdown-menu-group">
+              <!-- DROPDOWN MENU ITEM -->
+              <div class="menu-item">
+                <a href="/profile-settings">Settings</a>
+              </div>
+            </div>
+
+            <div class="dropdown-menu-group">
+              <!-- DROPDOWN MENU ITEM -->
+              <div class="menu-item">
+                <form action="/logout" method="POST">
+                  <button type="submit" id="logout-btn">Sign out</button>
+                  <!-- <a href="" id="logout-anchor">&#x2348; Sign out</a> -->
+                </form>
+              </div>
+            </div>
+
+          </div>
+  
+        <% } else { %>
+  
+          <div id="auth-container">
+            <a href="/login"><button id="sign-in-btn" class="auth-btn">Sign in</button></a>
+            <a href="/registration"><button id="sign-up-btn" class="auth-btn">Sign up</button></a>
+          </div>
         
-        <p><%= user.name %></p>
+        <% } %>
 
-        <a href="/profile-settings"><button>Settings</button></a>
+      </div>
 
-        <form action="/logout" method="POST">
-          <button type="submit">Sign out</button>
-        </form>
-
-      <% } else { %>
-
-        <a href="/login"><button>Sign in</button></a>
-        <a href="/registration"><button>Sign up</button></a>
-      
-      <% } %>
+      <div style="clear: both;"></div>
 
     </header>
 

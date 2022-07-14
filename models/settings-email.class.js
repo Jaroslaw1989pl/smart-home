@@ -26,7 +26,7 @@ class EmailUpdate {
   }
 
   getLastUpdate() {
-    const query = "SELECT email_update FROM registrated_users WHERE user_id = ?";
+    const query = "SELECT email_update FROM users WHERE id = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.#userId, (error, result, fields) => {
         if (error) reject(error);
@@ -36,7 +36,7 @@ class EmailUpdate {
   }
 
   checkStep() {
-    const query = "SELECT * FROM reset_email WHERE old_email = ?";
+    const query = "SELECT * FROM new_email WHERE old_email = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.#oldEmail, (error, result, felds) => {
         if (error) reject(error);
@@ -50,7 +50,7 @@ class EmailUpdate {
   }
 
   saveCode() {
-    const query = "INSERT INTO reset_email (old_email, code, expire_date) VALUES (?, ?, ?)";
+    const query = "INSERT INTO new_email (old_email, code, expire_date) VALUES (?, ?, ?)";
     let values = [
       this.#oldEmail,
       this.#code,
@@ -65,7 +65,7 @@ class EmailUpdate {
   }
 
   deleteCode() {
-    const query = "DELETE FROM reset_email WHERE old_email = ?";
+    const query = "DELETE FROM new_email WHERE old_email = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.#oldEmail, (error, result, fields) => {
         if (error) reject(error);
@@ -92,7 +92,7 @@ class EmailUpdate {
   }
 
   findCode() {
-    const query = "SELECT * FROM reset_email WHERE old_email = ? AND code = ?";
+    const query = "SELECT * FROM new_email WHERE old_email = ? AND code = ?";
     let values = [this.#oldEmail, this.#code];
     return new Promise((resolve, reject) => {
       if (this.validateCode()) {
@@ -111,7 +111,7 @@ class EmailUpdate {
   }
 
   validateEmail() {
-    const emailRegex = /^([\w]+[.|-]{0,1}[\w]+)+@([\w]+-{0,1}[\w]+\.)+[a-zA-Z]{2,3}$/i;
+    const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     try {
       if (this.#newEmail.length === 0) throw 'Please enter new email address.';
@@ -125,7 +125,7 @@ class EmailUpdate {
   }
 
   findEmail() {
-    const query = "SELECT user_email FROM registrated_users WHERE user_email = ?";
+    const query = "SELECT email FROM users WHERE email = ?";
     return new Promise((resolve, reject) => {
       if (this.validateEmail()) {
         this.database.connection.query(query, this.#newEmail, (error, result, fields) => {
@@ -149,7 +149,7 @@ class EmailUpdate {
   }
 
   verifyPassword() {
-    const query = "SELECT * FROM registrated_users WHERE user_id = ?";
+    const query = "SELECT * FROM users WHERE id = ?";
     return new Promise ((resolve, reject) => {
       if (this.validatePassword()) {
         this.database.connection.query(query, this.#userId, (error, result, fields) => {
@@ -161,7 +161,7 @@ class EmailUpdate {
   }
 
   updateEmail() {
-    const query = "UPDATE registrated_users SET user_email = ?, email_update =? WHERE user_id = ?";
+    const query = "UPDATE users SET email = ?, email_update = ? WHERE id = ?";
     const values = [
       this.#newEmail,
       parseInt(Date.now() / 1000),

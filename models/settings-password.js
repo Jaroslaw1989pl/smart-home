@@ -28,7 +28,7 @@ class PasswordUpdate {
   }
 
   getLastUpdate() {
-    const query = "SELECT password_update FROM registrated_users WHERE user_id = ?";
+    const query = "SELECT pass_update FROM users WHERE id = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.#userId, (error, result, fields) => {
         if (error) reject(error);
@@ -38,7 +38,7 @@ class PasswordUpdate {
   }
 
   checkStep() {
-    const query = "SELECT * FROM reset_password WHERE user_id = ?";
+    const query = "SELECT * FROM new_password WHERE user_id = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.#userId, (error, result, felds) => {
         if (error) reject(error);
@@ -52,9 +52,10 @@ class PasswordUpdate {
   }
 
   saveCode() {
-    const query = "INSERT INTO reset_password (user_id, code, expire_date) VALUES (?, ?, ?)";
+    const query = "INSERT INTO new_password (user_id, email, code, expire_date) VALUES (?, ?, ?, ?)";
     let values = [
       this.#userId,
+      this.#userEmail,
       this.#code,
       parseInt((Date.now() + 3600000) / 1000)
     ];
@@ -67,7 +68,7 @@ class PasswordUpdate {
   }
 
   deleteCode() {
-    const query = "DELETE FROM reset_password WHERE user_id = ?";
+    const query = "DELETE FROM new_password WHERE user_id = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.#userId, (error, result, fields) => {
         if (error) reject(error);
@@ -94,7 +95,7 @@ class PasswordUpdate {
   }
 
   findCode() {
-    const query = "SELECT * FROM reset_password WHERE user_id = ? AND code = ?";
+    const query = "SELECT * FROM new_password WHERE user_id = ? AND code = ?";
     let values = [this.#userId, this.#code];
     return new Promise((resolve, reject) => {
       if (this.validateCode()) {
@@ -149,7 +150,7 @@ class PasswordUpdate {
   }
 
   verifyPassword() {
-    const query = "SELECT * FROM registrated_users WHERE user_id = ?";
+    const query = "SELECT * FROM users WHERE id = ?";
     return new Promise ((resolve, reject) => {
       if (this.validatePassword()) {
         this.database.connection.query(query, this.#userId, (error, result, fields) => {
@@ -161,7 +162,7 @@ class PasswordUpdate {
   }
 
   updatePassword(hashedPass) {
-    const query = "UPDATE registrated_users SET user_password = ?, password_update = ? WHERE user_id = ?";
+    const query = "UPDATE users SET pass = ?, pass_update = ? WHERE id = ?";
     const values = [
       hashedPass,
       parseInt(Date.now() / 1000),

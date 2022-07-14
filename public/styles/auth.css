@@ -1,27 +1,219 @@
 body {
   margin: 0;
+  font-family: 'Lato', sans-serif;
   /* background-image: url('../../../static/assets/layouts/auth-background.jpg'); */
   /* background-size: cover; */
   background-color: #cf94ca;
 }
 
-  .auth-panel {
+  main {
+    width: 70%;
     margin: auto;
-    width: 400px;
-    padding: 25px;
-    background-color: #ffffff;
+    margin-top: 200px;
   }
-
 
 /* registartion form */
 
-    #password-requirements {
-      display: none;
+    .auth-registration-panel {
+      margin: auto;
+      width: 745px;
+      padding: 40px 60px;
+      background-color: #ffffff;
     }
 
-      #requirements-list {
-        padding-left: 20px;
+      .form-left {
+        float: left;
+        width: 320px;
+        padding-right: 10px;
       }
+
+        #img-box {
+          display: grid;
+          grid-template-columns: 100px 100px 100px; 
+          grid-template-rows: 100px 100px 100px;
+          grid-column-gap: 10px;
+          grid-row-gap: 10px;
+          margin: 0;
+          padding: 0;
+        }
+
+          .img-input-group {
+
+          }
+
+            input.avatar {
+              position: absolute;
+            }
+
+
+            input.avatar + label {
+              
+            }
+
+                img {
+                  width: 100%;
+                }
+
+      .form-right {
+        float: left;
+        width: 400px;
+        padding-left: 10px;
+        border-left: 1px solid #c2c2c2;
+      }  
+
+        .input-error {
+          display: none;
+          margin: 15px 0;
+          padding: 10px;
+          text-align: center;
+          font-size: 15px;
+          border: 1px solid #df0000;
+          border-radius: 5px;
+          background-color: #fcc9c9;
+          color: #df0000;
+        }
+        .input-error.active {
+          display: block;
+        }
+
+        #user-name-requirements {
+          display: none;
+        }
+
+          #user-name-requirements ul {
+            list-style-position: inside;
+            padding: 0;
+          }
+
+            #user-name-requirements li {
+              color: #7e7e7e;
+            }
+
+        #user-pass-requirements {
+          display: none;
+        }
+
+          #user-pass-requirements-list {
+            padding-left: 20px;
+            color: #7e7e7e;
+          }
+
+        #register-form-submit-btn {
+          width: 100%;
+          margin: 10px 0;
+          padding: 9px;
+          font-size: 16px;
+          font-weight: bold;
+          border: none;
+          border-radius: 5px;
+          background-color: #5fbe77;
+          color: #FFF;
+        }
+        #register-form-submit-btn:hover {
+          cursor: pointer;
+          background-color: #64db82;
+        }
+        #register-form-submit-btn:active {
+          background-color: #4b8a5b;
+        }
 
       
 /* login form */
+
+    #content-left {
+      float: left;
+      width: 40%;
+    }
+
+      #content-left h1 {
+        margin-bottom: 0;
+        font-family: 'Russo One', sans-serif;
+        font-size: 35px;
+        color: #FFF;
+      }
+
+      #content-left p {
+        margin-top: 0;
+        font-size: 20px;
+        color: #FFF;
+      }
+      
+    #content-right {
+      float: left;
+      width: 60%;
+    }
+
+      .auth-panel {
+        margin: auto;
+        width: 400px;
+        padding: 40px 60px;
+        background-color: #ffffff;
+      }
+
+        #auth-panel-header {
+          margin-bottom: 25px;
+        }
+
+        form {
+
+        }
+
+          .form-input {
+            margin-bottom: 25px;
+            width: 100%;
+            border-bottom: 1px solid #c2c2c2;
+          }
+          .form-input:hover {
+            border-bottom: 1px solid #7e7e7e;
+          }
+          .form-input:focus-within {
+            border-bottom: 2px solid #0076da;
+            margin-bottom: 24px
+          }
+
+            input[type="text"] {
+              width: 100%;
+              border: none;
+              outline: none;
+              font-size: 16px;
+            }
+            input[type="password"], #user-pass, #pass-conf {
+              width: 94%;
+              border: none;
+              outline: none;
+              font-size: 16px;
+            }
+          
+            .show-hide-btn {
+              background: url(/assets/auth/hidden.png);
+              background-size: cover;
+              background-repeat: no-repeat;
+              background-position: center center;
+              cursor:pointer;
+              width: 16px;
+              height: 16px;
+              padding: 0;
+              border: none;
+            }
+
+          #login-form-submit-btn {
+            width: 100%;
+            margin: 10px 0;
+            padding: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            border: 2px solid #5fbe77;
+            background-color: #FFF;
+            color: #5fbe77;
+          }
+          #login-form-submit-btn:hover {
+            cursor: pointer;
+            border: 2px solid #64db82;
+            color: #64db82;
+          }
+          #login-form-submit-btn:active {
+            border: 2px solid #4b8a5b;
+            color: #4b8a5b;
+          }

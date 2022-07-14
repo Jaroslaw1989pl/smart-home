@@ -1,9 +1,8 @@
 // custom modules
 const EmailUpdate = require('../models/settings-email.class');
-const BirthdayUpdate = require('./../models/settings-birthday.class');
 const NameUpdate = require('./../models/settings-name.class');
 const DeleteUser = require('./../models/auth-delete.class');
-const NewPassword = require('./../models/auth-new-password.class');
+const NewPassword = require('./../models/auth-password-new.class');
 const PasswordUpdate = require('../models/settings-password');
 
 
@@ -18,23 +17,6 @@ exports.home = (request, response, next) => {
   response.render('home.ejs', data);
 };
 
-exports.games = (request, response, next) => {
-  let data = {
-    html: {
-      title: 'Playfab | Games'
-    }
-  };
-  response.render('games.ejs', data);
-};
-
-exports.gamesCheckers = (request, response, next) => {
-  let data = {
-    html: {
-      title: 'Playfab | Checkers'
-    }
-  };
-  response.render('games-checkers.ejs', data);
-};
 
 /*** AUTHENTICATION ***/
 
@@ -90,7 +72,7 @@ exports.resetPassword = (request, response, next) => {
   request.session.errors = undefined;
   request.session.isEmailSent = undefined;
 
-  response.render('auth-reset-password.ejs', data);
+  response.render('auth-password-reset.ejs', data);
 };
 
 /*** NEW PASSWORD ***/
@@ -121,11 +103,12 @@ exports.newPassword = (request, response, next) => {
       request.session.errors = undefined;
       request.session.isPasswordChanged = undefined;
 
-      response.render('auth-new-password.ejs', data);
+      response.render('auth-password-new.ejs', data);
     }
   })
   .catch( error => console.log(error));
 };
+
 
 /*** PROTECTED ROUTES ***/
 
@@ -148,6 +131,7 @@ exports.profileSettings = (request, response, next) => {
 };
 
 exports.profileName = (request, response, next) => {
+
   const form = new NameUpdate();
 
   form.getLastUpdate(response.locals.user.id)
@@ -164,35 +148,7 @@ exports.profileName = (request, response, next) => {
     request.session.inputs = undefined;
     request.session.errors = undefined;
   
-    response.render('profile-name.ejs', data);
-  })
-  .catch(error => console.log(error));
-};
-
-exports.profileBirthday = (request, response, next) => {
-  const form = new BirthdayUpdate();
-  form.getLastUpdate(response.locals.user.id)
-  .then(result => {
-    let data = {
-      html: {
-        title: 'Playfab | User birthday'
-      },
-      isUpdateAvailable: false,
-      isRemoveAvailable: false,
-      errors: request.session.errors
-    };
-    if (result[0].birthday_update === null || result[0].birthday_update + 60/*3600000 * 24 * 14*/ < parseInt(Date.now() / 1000)) {
-      // birth date update is available
-      data.isUpdateAvailable = true;
-    }
-    if (result[0].birthday !== null && data.isUpdateAvailable === false) {
-      // birth date remove is available
-      data.isRemoveAvailable = true;
-    }
-
-    request.session.errors = undefined;
-    
-    response.render('profile-birthday.ejs', data);
+    response.render('settings-name.ejs', data);
   })
   .catch(error => console.log(error));
 };
@@ -211,20 +167,20 @@ exports.profileEmail = (request, response, next) => {
   request.session.inputs = undefined;
   request.session.errors = undefined;
 
-  // 1. Is 14 days passed since last update
   const form = new EmailUpdate(response.locals.user);
+  // 1. Is 14 days passed since last update
   form.getLastUpdate()
   .then(result => {
-    if (result[0].email_update + 60/*3600000 * 24 * 14*/ < parseInt(Date.now() / 1000)) {
-      // form.deleteCode();
-      data.isUpdateAvailable = true;
-    }
+    if (result[0].email_update + 60/*3600000 * 24 * 14*/ < parseInt(Date.now() / 1000)) data.isUpdateAvailable = true;
     // 2. Is code was send (code exists in the database)
     return form.checkStep();
   })
   .then(result => {
-    if (result.length > 0) data.isEmailSent = true;
-    response.render('profile-email.ejs', data);
+    // 3. If code was expired - delete code
+    if (result.length > 0 && result[0].expire_date < parseInt(Date.now() / 1000)) form.deleteCode();
+    else if (result.length > 0 && result[0].expire_date > parseInt(Date.now() / 1000)) data.isEmailSent = true;
+    // if (result.length > 0) data.isEmailSent = true;
+    response.render('settings-email.ejs', data);
   })
   .catch(error => console.log('views-controller.js => profileEmail() > getLastUpdate()', error));
 };
@@ -247,7 +203,7 @@ exports.profilePassword = (request, response, next) => {
   const form = new PasswordUpdate(response.locals.user);
   form.getLastUpdate()
   .then(result => {
-    if (result[0].password_update + 60/*3600000 * 24 * 14*/ < parseInt(Date.now() / 1000)) {
+    if (result[0].pass_update + 60/*3600000 * 24 * 14*/ < parseInt(Date.now() / 1000)) {
       // form.deleteCode();
       data.isUpdateAvailable = true;
     }
@@ -256,7 +212,7 @@ exports.profilePassword = (request, response, next) => {
   })
   .then(result => {
     if (result.length > 0) data.isEmailSent = true;
-    response.render('profile-password.ejs', data);
+    response.render('settings-password.ejs', data);
   })
   .catch(error => console.log('views-controller.js => profileEmail() > getLastUpdate()', error));
 };
@@ -279,7 +235,7 @@ exports.profileDelete = (request, response, next) => {
 
       request.session.isCodeCorrect = undefined;
       
-      response.render('profile-delete.ejs', data);
+      response.render('settings-delete.ejs', data);
 
     } else {
       let data = {
@@ -295,7 +251,7 @@ exports.profileDelete = (request, response, next) => {
       request.session.inputs = undefined;
       request.session.errors = undefined;
 
-      response.render('profile-delete.ejs', data);
+      response.render('settings-delete.ejs', data);
     }
   })
   .catch(error => console.log('profile delete form', error));

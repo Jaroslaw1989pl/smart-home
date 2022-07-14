@@ -6,17 +6,12 @@ const Database = require('../app/database.class');
 class NameUpdate {
 
   // private fields
-  #userId;
   #oldName;
   #newName;
-  #gold;
-  #isPriceAccepted;
 
   // public fields
-  isFormValid = true;
   errors = {
-    userName: '',
-    price: ''
+    userName: ''
   };
 
   constructor() {
@@ -24,15 +19,12 @@ class NameUpdate {
   }
 
   setUserData(formData) {
-    this.#userId = formData.userId;
     this.#oldName = formData.oldName;
     this.#newName = formData.newName;
-    this.#gold = formData.gold;
-    this.#isPriceAccepted = formData.isPriceAccepted;
   }
 
   getLastUpdate(userId) {
-    const query = "SELECT name_update FROM registrated_users WHERE user_id = ?";
+    const query = "SELECT name_update FROM users WHERE id = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, userId, (error, result, fields) => {
         if (error) reject(error);
@@ -42,7 +34,7 @@ class NameUpdate {
   }
 
   getUserName() {
-    const query = "SELECT user_name FROM registrated_users WHERE user_name = ?";
+    const query = "SELECT name FROM users WHERE name = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.#newName, (error, result, fields) => {
         if (error) reject(error);
@@ -60,47 +52,17 @@ class NameUpdate {
       return true;
     } catch (error) {
       this.errors.userName = error;
-      // this.isFormValid = false;
-      return false;
-    }
-  }
-
-  formValidation() {
-    try {
-      if (this.#gold < 100) throw 'You do not have enough gold.';
-      else if (this.#isPriceAccepted === false) throw 'You must accept pice.';
-      return true;
-    } catch (error) {
-      this.errors.price = error;
-      // this.isFormValid = false;
       return false;
     }
   }
 
   nameUpdate() {
-    const query = "UPDATE registrated_users SET user_name = ?, name_update = ? WHERE user_name = ?";
+    const query = "UPDATE users SET name = ?, name_update = ? WHERE name = ?";
     const values = [
       this.#newName,
       parseInt(Date.now() / 1000),
       this.#oldName
     ];
-    return new Promise((resolve, reject) => {
-      this.database.connection.query(query, values, (error, result, fields) => {
-        if (error) reject(error);
-        else resolve(result);
-      });
-    });
-  }
-
-  spaceUpdate() {
-    if (fs.existsSync('spaces/' + this.#oldName)) {
-      fs.rename('spaces/' + this.#oldName, 'spaces/' + this.#newName, () => console.log('User space name changed.'));
-    }
-  }
-
-  goldUpdate() {
-    const query = "UPDATE users_profiles SET gold = ? WHERE user_id = ?";
-    const values = [this.#gold - 100, this.#userId];
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, values, (error, result, fields) => {
         if (error) reject(error);

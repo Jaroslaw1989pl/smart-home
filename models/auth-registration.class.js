@@ -9,6 +9,7 @@ class Registration {
   #userEmail;
   #userPass;
   #passConf;
+  #userAvatar;
 
   // public fields
   isFormValid = true;
@@ -16,7 +17,8 @@ class Registration {
     userName: '',
     userEmail: '',
     userPass: '',
-    passConf: ''
+    passConf: '',
+    userAvatar: ''
   };
 
   constructor() {
@@ -28,10 +30,11 @@ class Registration {
     this.#userEmail = formData.userEmail;
     this.#userPass = formData.userPass;
     this.#passConf = formData.passConf;
+    this.#userAvatar = formData.userAvatar;
   }
 
   getUserName(userName) {
-    const query = "SELECT user_name FROM registrated_users WHERE user_name = ?";
+    const query = "SELECT name FROM users WHERE name = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, userName, (error, result, fields) => {
         if (error) reject(error);
@@ -41,7 +44,7 @@ class Registration {
   }
 
   getUserEmail(userEmail) {
-    const query = "SELECT user_email FROM registrated_users WHERE user_email = ?";
+    const query = "SELECT email FROM users WHERE email = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, userEmail, (error, result, fields) => {
         if (error) reject(error);
@@ -64,7 +67,7 @@ class Registration {
 
   emailValidation() {
     
-    const emailRegex = /^([\w]+[.|-]{0,1}[\w]+)+@([\w]+-{0,1}[\w]+\.)+[a-zA-Z]{2,3}$/i;
+    const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     try {
       if (this.#userEmail.length === 0) throw 'Please enter your email address.';
@@ -78,8 +81,9 @@ class Registration {
   passValidation() {
     try {
       if (this.#userPass.length === 0) throw 'Please enter a password.';
-      else if (this.#userPass.length < 3) throw 'Password does not meet requirements.';
+      else if (this.#userPass.length < 8) throw 'Password does not meet requirements.';
       else if (/[^\w]/.test(this.#userPass)) throw 'Password does not meet requirements.';
+      else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9_])/.test(this.#userPass)) throw 'Password does not meet requirements.';
     } catch (error) {
       this.errors.userPass = error;
       this.isFormValid = false;
@@ -92,6 +96,13 @@ class Registration {
       else if (this.#passConf !== this.#userPass) throw 'Passwords are not the same.';
     } catch (error) {
       this.errors.passConf = error;
+      this.isFormValid = false;
+    }
+  }
+
+  avatarVerification() {
+    if (!this.#userAvatar) {
+      this.errors.userAvatar = 'Please select your avatar.';
       this.isFormValid = false;
     }
   }

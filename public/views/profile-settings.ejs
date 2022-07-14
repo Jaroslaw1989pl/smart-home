@@ -3,115 +3,149 @@
 <!-- STYLES -->
 <link rel="stylesheet" href="/styles/profile-settings.css">
 <!-- SCRIPTS -->
-<script src="/scripts/settings.js" defer></script>
+<script src="/scripts/profile-settings.js" defer></script>
 
   <main>
 
     <section class="content">
 
       <h1>ACCOUNT MENAGEMENT</h1>
-      <!-- user personal avatar -->
-      <div class="info-personal-avatar">
-        <img src="<%= user.avatar %>" alt="profile avatar">
-        <form action="/profile-avatar" method="POST" enctype="multipart/form-data">
-          <input type="file" name="image" id="img-input">
-          <input type="submit" name="img-submit-btn" value="Upload">
-          <label for="info-personal-avatar" id="image-error" style="color: red;">
-            <%= typeof errors !== 'undefined' ? errors : '' %>
-          </label>
-        </form>
+
+      <div class="left-content">
+        <!-- user personal avatar -->
+        <div class="info-personal-avatar">
+          <img src="/assets/profile-avatars/<%= user.avatar %>.jpg" alt="profile avatar">
+        </div>
+
+        <div id="img-box">
+
+          <div class="img-input-group">
+            <input type="checkbox" class="avatar" name="avatar" id="orange" value="orange" <%= user.avatar === 'orange' ? 'checked' : ''  %>>
+            <label for="orange"><img src="/assets/profile-avatars/orange.jpg" alt=""></label>
+          </div>
+
+          <div class="img-input-group">
+            <input type="checkbox" class="avatar" name="avatar" id="blue" value="blue" <%= user.avatar === 'blue' ? 'checked' : '' %>>
+            <label for="blue"><img src="/assets/profile-avatars/blue.jpg" alt=""></label>
+          </div>
+
+          <div class="img-input-group">
+            <input type="checkbox" class="avatar" name="avatar" id="green" value="green" <%= user.avatar === 'green' ? 'checked' : '' %>>
+            <label for="green"><img src="/assets/profile-avatars/green.jpg" alt=""></label>
+          </div>
+
+          <div class="img-input-group">
+            <input type="checkbox" class="avatar" name="avatar" id="yellow" value="yellow" <%= user.avatar === 'yellow' ? 'checked' : '' %>>
+            <label for="yellow"><img src="/assets/profile-avatars/yellow.jpg" alt=""></label>
+          </div>
+
+          <div class="img-input-group">
+            <input type="checkbox" class="avatar" name="avatar" id="red" value="red" <%= user.avatar === 'red' ? 'checked' : '' %>>
+            <label for="red"><img src="/assets/profile-avatars/red.jpg" alt=""></label>
+          </div>
+
+          <div class="img-input-group">
+            <input type="checkbox" class="avatar" name="avatar" id="dark-blue" value="dark-blue" <%= user.avatar === 'dark-blue' ? 'checked' : '' %>>
+            <label for="dark-blue"><img src="/assets/profile-avatars/dark-blue.jpg" alt=""></label>
+          </div>
+
+          <div class="img-input-group">
+            <input type="checkbox" class="avatar" name="avatar" id="light-blue" value="light-blue" <%= user.avatar === 'light-blue' ? 'checked' : '' %>>
+            <label for="light-blue"><img src="/assets/profile-avatars/light-blue.jpg" alt=""></label>
+          </div>
+
+          <div class="img-input-group">
+            <input type="checkbox" class="avatar" name="avatar" id="beige" value="beige" <%= user.avatar === 'purple' ? 'checked' : '' %>>
+            <label for="beige"><img src="/assets/profile-avatars/beige.jpg" alt=""></label>
+          </div>
+
+          <div class="img-input-group">
+            <input type="checkbox" class="avatar" name="avatar" id="purple" value="purple" <%= user.avatar === 'purple' ? 'checked' : '' %>>
+            <label for="purple"><img src="/assets/profile-avatars/purple.jpg" alt=""></label>
+          </div>
+
+        </div>
       </div>
     
-      <div class="info-personal">
-        <div class="info-personal-user">
-          <!-- Username section -->
-          <div class="info-personal-wrapper username">
-            <div class="info-cell-icon">
-              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+      <div class="right-content">
+        <div class="info-personal">
+          <div class="info-personal-user">
+            <!-- Username section -->
+            <div class="info-personal-wrapper username">
+              <div class="info-cell-icon">
+                <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+              </div>
+              <div class="info-cell-value">
+                <h3><%= user.name %></h3>
+              </div>
+              <div class="info-cell-edit">
+                <a href="/profile-name">Change</a>
+              </div>
+              <div style="clear: both;"></div>
             </div>
-            <div class="info-cell-value">
-              <h3><%= user.name %></h3>
+            <!-- User location section -->
+            <div class="info-personal-wrapper location">
+              <div class="info-cell-icon">
+                <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+              </div>
+              <div class="info-cell-value">
+                <p id="user-location">Place of residance: </p><p id="user-location-info"></p>
+              </div>
+              <div class="info-cell-edit">
+              </div>
+              <div style="clear: both;"></div>
             </div>
-            <div class="info-cell-edit">
-              <a href="/profile-name">Change</a>
-            </div>
-            <div style="clear: both;"></div>
           </div>
-          <!-- User birthday section -->
-          <div class="info-personal-wrapper birthday">
-            <div class="info-cell-icon">
-              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+      
+          <div class="info-personal-security">
+            <h3>Account Security Settings</h3>
+            <!-- User email section -->
+            <div class="info-personal-wrapper email">
+              <div class="info-cell-icon">
+                <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+              </div>
+              <div class="info-cell-value">
+                <p><b><%= user.email %></b></p>
+                <p>Email address added: <%= new Date(user.emailUpdate * 1000) %></p>
+              </div>
+              <div class="info-cell-edit">
+                <a href="/profile-email">Change</a>
+              </div>
+              <div style="clear: both;"></div>
             </div>
-            <div class="info-cell-value">
-              <p>Birthday: <%= user.birthday || 'Not specified.' %></p>
+            <!-- User password section -->
+            <div class="info-personal-wrapper">
+              <div class="info-cell-icon">
+                <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+              </div>
+              <div class="info-cell-value">
+                <p>Password added: <%= new Date(user.passwordUpdate * 1000) %></p>
+              </div>
+              <div class="info-cell-edit">
+                <a href="/profile-password">Change</a>
+              </div>
+              <div style="clear: both;"></div>
             </div>
-            <div class="info-cell-edit">
-            <a href="/profile-birthday"><button>Specify</button></a>
-            </div>
-            <div style="clear: both;"></div>
           </div>
-          <!-- User location section -->
-          <div class="info-personal-wrapper location">
-            <div class="info-cell-icon">
-              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+      
+          <div class="info-personal-data">
+            <h3>Data Protection</h3>
+            <!-- User delete section -->
+            <div class="info-personal-wrapper data">
+              <div class="info-cell-icon">
+                <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+              </div>
+              <div class="info-cell-value">
+                <p>Delete <b><%= %></b> user account</p>
+              </div>
+              <div class="info-cell-edit">
+                <a href="/profile-delete"><button>Delete account</button></a>
+              </div>
+              <p>UWAGA do usunięcia! Przy usuwaniu konta należy usuwać wszystkie dane z tabel</p>
+              <div style="clear: both;"></div>
             </div>
-            <div class="info-cell-value">
-              <p id="user-location">Place of residance: </p><p id="user-location-info"></p>
-            </div>
-            <div class="info-cell-edit">
-            </div>
-            <div style="clear: both;"></div>
           </div>
-        </div>
-    
-        <div class="info-personal-security">
-          <h3>Account Security Settings</h3>
-          <!-- User email section -->
-          <div class="info-personal-wrapper email">
-            <div class="info-cell-icon">
-              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
-            </div>
-            <div class="info-cell-value">
-              <p><b><%= user.email %></b></p>
-              <p>Email address added: <%= new Date(user.emailUpdate * 1000) %></p>
-            </div>
-            <div class="info-cell-edit">
-              <a href="/profile-email">Change</a>
-            </div>
-            <div style="clear: both;"></div>
-          </div>
-          <!-- User password section -->
-          <div class="info-personal-wrapper">
-            <div class="info-cell-icon">
-              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
-            </div>
-            <div class="info-cell-value">
-              <p>Password added: <%= new Date(user.passwordUpdate * 1000) %></p>
-            </div>
-            <div class="info-cell-edit">
-              <a href="/profile-password">Change</a>
-            </div>
-            <div style="clear: both;"></div>
-          </div>
-        </div>
-    
-        <div class="info-personal-data">
-          <h3>Data Protection</h3>
-          <!-- User delete section -->
-          <div class="info-personal-wrapper data">
-            <div class="info-cell-icon">
-              <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
-            </div>
-            <div class="info-cell-value">
-              <p>Delete <b><%= %></b> user account</p>
-            </div>
-            <div class="info-cell-edit">
-              <a href="/profile-delete"><button>Delete account</button></a>
-            </div>
-            <p>UWAGA do usunięcia! Przy usuwaniu konta należy usuwać wszystkie dane z tabel</p>
-            <div style="clear: both;"></div>
-          </div>
-        </div>
+      </div>
     
       <div style="clear: both;"></div>
       

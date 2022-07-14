@@ -1,5 +1,5 @@
 // custom modules
-const Database = require('./../app/database.class');
+const Database = require('../app/database.class');
 
 
 class NewPassword {
@@ -30,7 +30,7 @@ class NewPassword {
   }
 
   tokenValidation(token) {
-    const query = "SELECT * FROM reset_password WHERE token = ?";
+    const query = "SELECT * FROM new_password WHERE token = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, token, (error, result, fields) => {
         if (error) reject(error);
@@ -42,8 +42,9 @@ class NewPassword {
   passValidation() {
     try {
       if (this.#userPass.length === 0) throw 'Please enter a password.';
-      if (this.#userPass.length < 3) throw 'Password does not meet requirements.';
-      if (/[^\w]/.test(this.#userPass)) throw 'Password does not meet requirements.';
+      else if (this.#userPass.length < 8) throw 'Password does not meet requirements.';
+      else if (/[^\w]/.test(this.#userPass)) throw 'Password does not meet requirements.';
+      else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9_])/.test(this.#userPass)) throw 'Password does not meet requirements.';
     } catch (error) {
       this.errors.userPass = error;
       this.isFormValid = false;
@@ -61,7 +62,7 @@ class NewPassword {
   }
 
   passUniquenessValidation() {
-    const query = "SELECT * FROM registrated_users WHERE user_email = ?";
+    const query = "SELECT * FROM users WHERE email = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.#userEmail, (error, result, fields) => {
         if (error) reject(error);
@@ -71,7 +72,7 @@ class NewPassword {
   }
 
   passUpdate(hashedPass) {
-    const query = "UPDATE registrated_users SET user_password = ? WHERE user_email = ?";
+    const query = "UPDATE users SET pass = ? WHERE email = ?";
     let values = [
       hashedPass,
       this.#userEmail
@@ -86,7 +87,7 @@ class NewPassword {
 
   deleteToken(emailSelector = null) {
     let email = emailSelector != null ? emailSelector : this.#userEmail;
-    const query = "DELETE FROM reset_password WHERE email = ?";
+    const query = "DELETE FROM new_password WHERE email = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, email, (error, result, fields) => {
         if (error) reject(error);

@@ -1,13 +1,15 @@
 // build-in modules
 const nodemailer = require('nodemailer');
+// custom modules
+const { emailConfig } = require('./../app/config');
 
 
 class Email {
 
   // private fields
-  #service = 'gmail;'
-  #user = '@gmail.com';
-  #pass = '';
+  #service = 'gmail';
+  #user = 'dzidajaroslaw@gmail.com';
+  #pass = 'qquhbovkurspshya';
 
   // protected fields
   _transporter;

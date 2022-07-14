@@ -5,65 +5,94 @@ section {
   background-color: rgba(149, 224, 224, 0.562);
 }
 
-  .info-personal-avatar {
-    position: relative;
+  .left-content {
     float: left;
-    width: 225px;
-    height: 225px;
-    margin: 25px;
-    border: 2px dashed gray;
+    width: 350px;
+    border-right: 1px solid black;
   }
 
-    .info-personal-avatar img{
-      position: absolute;
-      width: 100%;
+    .info-personal-avatar {
+      position: relative;
+      float: left;
+      width: 225px;
+      height: 225px;
+      margin: 25px;
+      border: 2px dashed gray;
     }
 
-    .info-personal-avatar form{
-      position: absolute;
-      width: 100%;
-    }
-
-  .info-personal {
-    width: 500px;
-    float: left;
-    margin: 25px;
-  }
-
-    .info-personal-user {
-      background-color: coral;
-    }
-
-    .info-personal-security {
-      margin-top: 20px;
-      background-color: chartreuse;
-    }
-
-    .info-personal-data {
-      margin-top: 20px;
-      background-color: dodgerblue;
-    }
-
-      .info-personal-wrapper {
-        margin: auto;
-        width: 450px;
-        background-color: hotpink;
-        border-bottom: 1px solid gray;
+      .info-personal-avatar img{
+        position: absolute;
+        width: 100%;
       }
 
-        .info-cell-icon {
-          float: left;
+      .info-personal-avatar form {
+        position: absolute;
+        width: 100%;
+      }
+
+      .img-input-group {
+        position: relative;
+        display: inline-block;
+        margin: 5px;
+        width: 100px;
+      }
+
+        input.avatar {
+          position: absolute;
         }
 
-          .info-cell-icon img{
-            width: 60px;
-            height: 60px;
+
+        input.avatar + label {
+          
+        }
+
+          img {
+            width: 100%;
           }
 
-        .info-cell-value {
-          float: left;
+  .right-content {
+    float: left;
+  }
+
+    .info-personal {
+      width: 500px;
+      margin: 25px;
+    }
+
+      .info-personal-user {
+        background-color: coral;
+      }
+
+      .info-personal-security {
+        margin-top: 20px;
+        background-color: chartreuse;
+      }
+
+      .info-personal-data {
+        margin-top: 20px;
+        background-color: dodgerblue;
+      }
+
+        .info-personal-wrapper {
+          margin: auto;
+          width: 450px;
+          background-color: hotpink;
+          border-bottom: 1px solid gray;
         }
 
-        .info-cell-edit {
-          float: left;
-        }
+          .info-cell-icon {
+            float: left;
+          }
+
+            .info-cell-icon img{
+              width: 60px;
+              height: 60px;
+            }
+
+          .info-cell-value {
+            float: left;
+          }
+
+          .info-cell-edit {
+            float: left;
+          }

@@ -4,17 +4,16 @@ const bcrypt = require('bcryptjs');
 const Registration = require('./../models/auth-registration.class');
 const Login = require('./../models/auth-login.class');
 const User = require('./../models/user.class');
-const ResetPassword = require('./../models/auth-reset-password.class');
-const NewPassword = require('./../models/auth-new-password.class');
+const ResetPassword = require('./../models/auth-password-reset.class');
+const NewPassword = require('./../models/auth-password-new.class');
 const DeleteUser = require('./../models/auth-delete.class');
 
 
 /*** USER REGISTRATION ***/
 
 exports.findUserName = (request, response, next) => {
-  // const form = new Registration();
-  // form.getUserName(request.query.userName)
-  (new Registration()).getUserName(request.query.userName)
+  const form = new Registration();
+  form.getUserName(request.query.userName)
   .then(data => {
     if (data.length > 0) response.send(true);
     else response.send(false);
@@ -23,7 +22,8 @@ exports.findUserName = (request, response, next) => {
 };
 
 exports.findUserEmail = (request, response, next) => {
-(new Registration()).getUserEmail(request.query.userEmail)
+  const form = new Registration();
+  form.getUserEmail(request.query.userEmail)
   .then(data => {
     if (data.length > 0) response.send(true);
     else response.send(false);
@@ -36,7 +36,8 @@ exports.registration = (request, response, next) => {
     userName: request.body.userName,
     userEmail: request.body.userEmail,
     userPass: request.body.userPass,
-    passConf: request.body.passConf
+    passConf: request.body.passConf,
+    userAvatar: request.body.avatar || null
   };
 
   const form = new Registration();
@@ -48,6 +49,7 @@ exports.registration = (request, response, next) => {
   form.emailValidation();
   form.passValidation();
   form.passConfirmation();
+  form.avatarVerification();
   
   // 2. verifying user name uniqueness
   form.getUserName(request.body.userName)
@@ -72,12 +74,11 @@ exports.registration = (request, response, next) => {
       response.redirect('/registration');
     } else {
       // 4. hashing password
-      /*return*/ bcrypt.hash(formData.userPass, 12)
+      bcrypt.hash(formData.userPass, 12)
       .then(hashedPass => {
         formData.userPass = hashedPass;
         const user = new User();
-        user.addSpace(formData.userName);
-        /*return*/ user.addUser(formData);
+        user.addUser(formData);
       })
       .then(() => {
         request.session.isRegistrationCompleted = true;
@@ -100,42 +101,34 @@ exports.login = (request, response, next) => {
   const form = new Login();
   
   form.setUserData(formData);
-
-  // 1. Inputs validation
-  if (!form.emailValidation() || !form.passValidation()) {
-    request.session.errors = 'Invalid username or password.';
-    request.session.inputs = formData;
-    response.redirect('/login');
-  } else {
-    form.findUser()
-    .then(result => {
-      if (result.length === 0) {
-        request.session.errors = 'Invalid username or password.';
-        request.session.inputs = formData;
-        response.redirect('/login');
-      } else {
-        bcrypt.compare(formData.userPass, result[0].user_password)
-        .then(match => {
-          if (match) {
-            const user = new User();
-            user.getUser(result[0].user_id)
-            .then(result => {
-              request.session.user = user.setUser(result[0]);
-              request.session.isLoggedIn = true;
-              response.redirect('/');
-            })
-            .catch(error => console.log(error));
-          } else {
-            request.session.errors = 'Invalid username or password.';
-            request.session.inputs = formData;
-            response.redirect('/login');
-          }
-        })
-        .catch(error => console.log(error));
-      }
-    })
-    .catch(error => console.log(error));
-  }
+  form.findUser()
+  .then(result => {
+    if (result.length === 0) {
+      request.session.errors = 'Invalid email or password.';
+      request.session.inputs = formData;
+      response.redirect('/login');
+    } else {
+      bcrypt.compare(formData.userPass, result[0].pass)
+      .then(match => {
+        if (match) {
+          const user = new User();
+          user.getUser(result[0].id)
+          .then(result => {
+            request.session.user = user.setUser(result[0]);
+            request.session.isLoggedIn = true;
+            response.redirect('/');
+          })
+          .catch(error => console.log(error));
+        } else {
+          request.session.errors = 'Invalid username or password.';
+          request.session.inputs = formData;
+          response.redirect('/login');
+        }
+      })
+      .catch(error => console.log(error));
+    }
+  })
+  .catch(error => console.log(error));
 };
 
 /*** USER LOGOUT ***/
@@ -230,9 +223,12 @@ exports.resetPassword = (request, response, next) => {
   
   const reset = new ResetPassword(formData);
   // 1. email address validation
+  console.log('1');
   reset.emailValidation();
+  console.log('3');
   if (reset.isFormValid) {
     // 2. verifying email address exists in database
+    console.log('4');
     const form = new Registration();
     form.getUserEmail(formData.userEmail)
     .then(data => {
@@ -278,7 +274,7 @@ exports.newPassword = (request, response, next) => {
   if (form.isFormValid) {
     form.passUniquenessValidation()
     .then(result => {
-      return bcrypt.compare(formData.userPass, result[0].user_password);
+      return bcrypt.compare(formData.userPass, result[0].pass);
     })
     .then(match => {
       if (match) {

@@ -1,84 +1,189 @@
 <%- include('../includes/auth-head.ejs') %>
 
 <!-- SCRIPTS -->
+<script src="/scripts/auth-registration-actions.js" defer></script>
 <script src="/scripts/auth-registration-form.js" defer></script>
 
   <main>
 
-    <div class="auth-panel">
+    <div id="content-left">
 
-      <% if (typeof isRegistrationCompleted !== 'undefined' && isRegistrationCompleted) { %>
+      <h1>Playfab</h1>
+      <p>Sign in or create an account</p>
 
-        <h1>Rejestracja powidła się</h1>
+    </div>
 
-      <% } else { %>
+    <div id="content-right">
 
-        <header>
-          <h1>Create an account</h1>
-          <p>Already have an account? <a href="login">Sign in</a></p>
-        </header>
-      
-        <form name="registration-form" action="/registration" method="POST">
-            
-          <!-- User name input -->
-          <label for="user-name">User name</label><br>
-          <input type="text" id="user-name" name="userName" class="registration-input" value="<%= 
-            typeof inputs !== 'undefined' ? inputs.userName : ''
-          %>">
-          <br>
-          <label for="user-name" id="user-name-error" style="color: red;">
-            <%= typeof errors !== 'undefined' ? errors.userName : '' %>
-          </label>
-          <br>
-      
-          <!-- User email input -->
-          <label for="user-email">Email</label><br>
-          <input type="text" id="user-email" name="userEmail" class="registration-input" value="<%= 
-            typeof inputs !== 'undefined' ? inputs.userEmail : ''
-          %>">
-          <br>
-          <label for="user-email" id="user-email-error" style="color: red;">
-            <%= typeof errors !== 'undefined' ? errors.userEmail : '' %>
-          </label>
-          <br>
-      
-          <!-- User password input -->
-          <label for="user-pass">Password</label><br>
-          <input type="text" id="user-pass" name="userPass" class="registration-input" value="<%= 
-            typeof inputs !== 'undefined' ? inputs.userPass : ''
-          %>">
-          <br>
-          <label for="user-pass" id="user-pass-error" style="color: red;">
-            <%= typeof errors !== 'undefined' ? errors.userPass : '' %>
-          </label>
-          <section id="password-requirements">
-            <strong><p>Create a password that:</p></strong>
-            <ul id="requirements-list">
-              <li id="password-length">contains at least 8 characters</li>
-              <li id="password-letters">contains both lower (a-z) and upper case letters (A-Z)</li>
-              <li id="password-symbols">contains at least one number (0-9) or underscore symbol</li>          
-              <li id="password-alfa-num">does not contain non afpha numeric symbols</li>
-            </ul>
-          </section>
-          <br>
-      
-          <!-- User password input -->  
-          <label for="pass-conf">Confirm password</label><br>
-          <input type="text" id="pass-conf" name="passConf" class="registration-input" value="<%= 
-            typeof inputs !== 'undefined' ? inputs.passConf : ''
-          %>">
-          <br>
-          <label for="pass-conf" id="pass-conf-error" style="color: red;">
-            <%= typeof errors !== 'undefined' ? errors.passConf : '' %>
-          </label>
-          <br>
-          <!-- privacy policy accept button -->
-            
-          <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Creat account" >
-      
-        </form>
-
-      <% } %>
+      <div class="auth-registration-panel">
+  
+        <% if (typeof isRegistrationCompleted !== 'undefined' && isRegistrationCompleted) { %>
+  
+          <h1>Rejestracja powidła się</h1>
+  
+        <% } else { %>
+  
+          <header>
+            <h1>Create an account</h1>
+            <p>Already have an account? <a href="login">Sign in</a></p>
+          </header>
+        
+          <form name="registration-form" action="/registration" method="POST">
+              
+            <div class="form-left">
+  
+              <div id="img-box">
+  
+                <div class="img-input-group">
+                  <input type="checkbox" class="avatar" name="avatar" id="avatar-orange" value="orange" <%= 
+                    typeof inputs !== 'undefined' && inputs.userAvatar === 'orange' ? 'checked' : ''  
+                  %>>
+                  <label for="avatar-orange"><img src="/assets/profile-avatars/orange.jpg" alt=""></label>
+                </div>
+  
+                <div class="img-input-group">
+                  <input type="checkbox" class="avatar" name="avatar" id="avatar-blue" value="blue" <%= 
+                    typeof inputs !== 'undefined' && inputs.userAvatar === 'blue' ? 'checked' : ''  
+                  %>>
+                  <label for="avatar-blue"><img src="/assets/profile-avatars/blue.jpg" alt=""></label>
+                </div>
+  
+                <div class="img-input-group">
+                  <input type="checkbox" class="avatar" name="avatar" id="avatar-green" value="green" <%= 
+                      typeof inputs !== 'undefined' && inputs.userAvatar === 'green' ? 'checked' : ''  
+                    %>>
+                  <label for="avatar-green"><img src="/assets/profile-avatars/green.jpg" alt=""></label>
+                </div>
+  
+                <div class="img-input-group">
+                  <input type="checkbox" class="avatar" name="avatar" id="avatar-yellow" value="yellow" <%= 
+                    typeof inputs !== 'undefined' && inputs.userAvatar === 'yellow' ? 'checked' : ''  
+                  %>>
+                  <label for="avatar-yellow"><img src="/assets/profile-avatars/yellow.jpg" alt=""></label>
+                </div>
+  
+                <div class="img-input-group">
+                  <input type="checkbox" class="avatar" name="avatar" id="avatar-red" value="red" <%= 
+                    typeof inputs !== 'undefined' && inputs.userAvatar === 'red' ? 'checked' : ''  
+                  %>>
+                  <label for="avatar-red"><img src="/assets/profile-avatars/red.jpg" alt=""></label>
+                </div>
+  
+                <div class="img-input-group">
+                  <input type="checkbox" class="avatar" name="avatar" id="avatar-dark-blue" value="dark-blue" <%= 
+                    typeof inputs !== 'undefined' && inputs.userAvatar === 'dark-blue' ? 'checked' : ''  
+                  %>>
+                  <label for="avatar-dark-blue"><img src="/assets/profile-avatars/dark-blue.jpg" alt=""></label>
+                </div>
+  
+                <div class="img-input-group">
+                  <input type="checkbox" class="avatar" name="avatar" id="avatar-light-blue" value="light-blue" <%= 
+                    typeof inputs !== 'undefined' && inputs.userAvatar === 'light-blue' ? 'checked' : ''  
+                  %>>
+                  <label for="avatar-light-blue"><img src="/assets/profile-avatars/light-blue.jpg" alt=""></label>
+                </div>
+  
+                <div class="img-input-group">
+                  <input type="checkbox" class="avatar" name="avatar" id="avatar-beige" value="beige" <%= 
+                    typeof inputs !== 'undefined' && inputs.userAvatar === 'purple' ? 'checked' : ''  
+                  %>>
+                  <label for="avatar-beige"><img src="/assets/profile-avatars/beige.jpg" alt=""></label>
+                </div>
+  
+                <div class="img-input-group">
+                  <input type="checkbox" class="avatar" name="avatar" id="avatar-purple" value="purple" <%= 
+                    typeof inputs !== 'undefined' && inputs.userAvatar === 'purple' ? 'checked' : ''  
+                  %>>
+                  <label for="avatar-purple"><img src="/assets/profile-avatars/purple.jpg" alt=""></label>
+                </div>
+  
+              </div>
+  
+              <!-- User avatar error message -->
+              <p id="user-avatar-error" class="input-error<%= (typeof errors !== 'undefined' && errors.userAvatar) ? ' active' : '' %>"><%= 
+                (typeof errors !== 'undefined' && errors.userAvatar) ? errors.userAvatar : '' 
+              %></p>
+  
+            </div>
+  
+            <div class="form-right">
+  
+              <!-- User name input -->
+              <div class="form-input">
+                <input type="text" id="user-name" name="userName" class="registration-input" placeholder="User name" value="<%= 
+                  typeof inputs !== 'undefined' ? inputs.userName : ''
+                  %>">
+              </div>
+              <!-- User name error message -->
+              <p id="user-name-error" class="input-error<%= (typeof errors !== 'undefined' && errors.userName) ? ' active' : ''%>"><%= 
+                (typeof errors !== 'undefined' && errors.userName) ? errors.userName : '' 
+              %></p>
+              <!-- User name requirements -->
+              <section id="user-name-requirements" class="input-requirements">
+                <strong>Create a user name that:</strong>
+                <ul id="user-name-requirements-list">
+                  <li id="user-name-length">contains between 3 and 24 characters</li>
+                  <li id="user-name-alfa-num">does not contain non afpha numeric symbols</li>
+                  <li id="user-name-uniqueness">is not already in use</li>
+                </ul>
+              </section>
+          
+              <!-- User email input -->
+              <div class="form-input">
+                <input type="text" id="user-email" name="userEmail" class="registration-input" placeholder="Email address" value="<%= 
+                  typeof inputs !== 'undefined' ? inputs.userEmail : ''
+                  %>">
+              </div>
+              <!-- User email error message -->
+              <p id="user-email-error" class="input-error<%= (typeof errors !== 'undefined' && errors.userEmail) ? ' active' : ''%>"><%= 
+                (typeof errors !== 'undefined' && errors.userEmail) ? errors.userEmail : '' 
+              %></p>
+              
+              <!-- User password input -->
+              <div class="form-input"> 
+                <input type="password" id="user-pass" name="userPass" class="registration-input" placeholder="Password" value="<%= 
+                  typeof inputs !== 'undefined' ? inputs.userPass : ''
+                  %>">
+                <input type="button" class="show-hide-btn" id="register-pass-toggle" value="">
+              </div>
+              <!-- User password error message -->
+              <p id="user-pass-error" class="input-error<%= (typeof errors !== 'undefined' && errors.userPass) ? ' active' : '' %>"><%= 
+                (typeof errors !== 'undefined' && errors.userPass) ? errors.userPass : '' 
+              %></p>
+              <!-- User password requirements -->
+              <section id="user-pass-requirements" class="input-requirements">
+                <strong><p>Create a password that:</p></strong>
+                <ul id="user-pass-requirements-list">
+                  <li id="password-length">contains at least 8 characters</li>
+                  <li id="password-letters">contains both lower (a-z) and upper case letters (A-Z)</li>
+                  <li id="password-symbols">contains at least one number (0-9) or underscore symbol</li>          
+                  <li id="password-alfa-num">does not contain non afpha numeric symbols</li>
+                </ul>
+              </section>
+          
+              <!-- User password input -->
+              <div class="form-input">
+                <input type="password" id="pass-conf" name="passConf" class="registration-input" placeholder="Confirm password" value="<%= 
+                  typeof inputs !== 'undefined' ? inputs.passConf : ''
+                  %>">
+                <input type="button" class="show-hide-btn" id="register-conf-toggle" value="">
+              </div>
+              <!-- User password error message -->
+              <p id="pass-conf-error" class="input-error<%= (typeof errors !== 'undefined' && errors.passConf) ? ' active' : '' %>"><%= 
+                (typeof errors !== 'undefined' && errors.passConf) ? errors.passConf : '' 
+              %></p>
+                
+              <input type="submit" id="register-form-submit-btn" name="formSubmitBtn" value="Creat account" >
+  
+            </div>
+  
+            <div style="clear: both;"></div>
+  
+          </form>
+  
+        <% } %>
+  
+      </div>
 
     </div>
 

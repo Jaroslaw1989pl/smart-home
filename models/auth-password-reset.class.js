@@ -1,7 +1,8 @@
 // 3rd party modules
 const crypto = require('crypto');
 // custom modules
-const Database = require('./../app/database.class');
+const config = require('./../app/config');
+const Database = require('../app/database.class');
 const Email = require('./email.class');
 
 
@@ -24,19 +25,28 @@ class ResetPassword {
   }
 
   emailValidation() {
-    const emailRegex = /^([\w]+[.|-]{0,1}[\w]+)+@([\w]+-{0,1}[\w]+\.)+[a-zA-Z]{2,3}$/i;
-
+    console.log('emailValidation - 0');
+    const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    console.log('emailValidation - 1');
     try {
-      if (this.email.length === 0) throw 'Please enter your email address.';
-      if (!emailRegex.test(this.email)) throw 'That\'s an invalid email.';
+      console.log('emailValidation - 2');
+      if (this.email.length === 0) {
+        console.log('emailValidation - 3');
+        throw 'Please enter your email address.';
+      }
+      else if (!emailRegex.test(this.email)) {
+        console.log('emailValidation - 4');
+        throw 'That\'s an invalid email.';
+      }
     } catch (error) {
+      console.log('emailValidation - 5');
       this.errors = error;
       this.isFormValid = false;
     }
   };
 
   createToken() {
-    const query = "INSERT INTO reset_password (email, token, expire_date) VALUES (?, ?, ?)";
+    const query = "INSERT INTO new_password (email, token, expire_date) VALUES (?, ?, ?)";
     let values = [
       this.email,
       this.token,
@@ -51,7 +61,7 @@ class ResetPassword {
   }
 
   deleteToken() {
-    const query = "DELETE FROM reset_password WHERE email = ?";
+    const query = "DELETE FROM new_password WHERE email = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.email, (error, result, fields) => {
         if (error) reject(error);
@@ -64,7 +74,7 @@ class ResetPassword {
     const subject = 'Password reset';
     const message = `
       <p>You requested a password reset</p>
-      <p>Click this <a href="http://localhost:3002/reset-password/${this.token}">link</a> to set a new password</p>
+      <p>Click this <a href="http://localhost:${config.PORT}/reset-password/${this.token}">link</a> to set a new password</p>
     `;
     const email = new Email();
     email.send(this.email, subject, message);

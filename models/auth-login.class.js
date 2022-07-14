@@ -18,7 +18,7 @@ class Login {
   }
 
   emailValidation() {
-    const emailRegex = /^([\w]+[.|-]{0,1}[\w]+)+@([\w]+-{0,1}[\w]+\.)+[a-zA-Z]{2,3}$/i;
+    const emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     try {
       if (this.#userEmail.length === 0) throw 'Please enter your email address.';
       else if (!emailRegex.test(this.#userEmail)) throw 'That\'s an invalid email.';
@@ -39,7 +39,7 @@ class Login {
   }
 
   findUser() {
-    const query = "SELECT * FROM registrated_users WHERE user_email = ?";
+    const query = "SELECT * FROM users WHERE email = ?";
     return new Promise((resolve, reject) => {
       this.database.connection.query(query, this.#userEmail, (error, result, fields) => {
         if (error) reject(error);

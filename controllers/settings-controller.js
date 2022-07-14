@@ -2,47 +2,28 @@
 const formidable = require('formidable');
 const bcrypt = require('bcryptjs');
 // custom modules
-const ImageUpload = require('./../models/settings-image.class');
+const AvatarUpdate = require('./../models/settings-avatar.class');
 const NameUpdate = require('./../models/settings-name.class');
-const BirthdayUpdate = require('./../models/settings-birthday.class');
 const EmailUpdate = require('../models/settings-email.class');
 const PasswordUpdate = require('../models/settings-password');
 
 
 exports.profileAvatar = (request, response, next) => {
-  const form = new formidable.IncomingForm();
-  form.parse(request, (error, fields, files) => {
-    if (error) console.log(error);
-    else {
-      let formData = {
-        size: files.image.size,
-        mimetype: files.image.mimetype,
-        oldPath: files.image.filepath,
-        newPath: `/assets/img/profile-avatars/${files.image.newFilename}.${files.image.mimetype.split('/')[1]}`,
-        actualPath: 'public' + response.locals.user.avatar
-      };
-      const imageForm = new ImageUpload(formData);
-      // validate image
-      if (!imageForm.validation()) {
-        request.session.errors = imageForm.errors;
-      } else {
-        imageForm.saveInFileSystem();
-        imageForm.saveInDatabase(response.locals.user.id);
-        response.locals.user.avatar = formData.newPath;
-        request.session.flash = {success: 'Avatar updated.'};
-      }
-    }
-    response.redirect('/profile-settings');
-  });
+
+  const form = new AvatarUpdate(request.body.avatar);
+  form.saveInDatabase(response.locals.user.id)
+  .then(result => {
+    response.locals.user.avatar = request.body.avatar
+    response.send(true);
+  })
+  .catch(error => console.log(error));
 };
 
 exports.profileName = (request, response, next) => {
+
   let formData = {
-    userId: response.locals.user.id,
     oldName: response.locals.user.name,
-    newName: request.body.userName,
-    gold: response.locals.user.gold,
-    isPriceAccepted: request.body.isPriceAccepted ? true : false
+    newName: request.body.userName
   }
 
   const form = new NameUpdate();
@@ -50,61 +31,28 @@ exports.profileName = (request, response, next) => {
 
   request.session.inputs = request.body;
 
-  if (form.nameValidation()) {
+  if (form.nameValidation() === false) {
+    request.session.errors = form.errors;
+    response.redirect('/settings-name');
+  } else {
     form.getUserName()
     .then(result => {
       if (result.length > 0) {
-        form.formValidation();
         form.errors.userName = 'User name already taken.';
         request.session.errors = form.errors;
-        response.redirect('/profile-name');
-      } else if (result.length === 0 && !form.formValidation()) {
-        request.session.errors = form.errors
-        response.redirect('/profile-name');
-      } else if (result.length === 0 && form.formValidation()) {
+        response.redirect('/settings-name');
+      } else if (result.length === 0) {
         form.nameUpdate()
         .then(() => {
-          form.goldUpdate();
-          form.spaceUpdate();
           response.locals.user.name = formData.newName;
-          response.locals.user.gold = formData.gold - 100;
-          return response.redirect('/profile-settings');
+          request.session.flash = {success: 'Name updated.'};
+          response.redirect('/profile-settings');
         })
         .catch(error => console.log(error));
       }
     })
     .catch(error => console.log(error));
-  } else {
-    form.formValidation();
-    request.session.errors = form.errors;
-    response.redirect('/profile-name');
   }
-};
-
-exports.profileBirthday = (request, response, next) => {
-  const form = new BirthdayUpdate();
-
-  let formData = {
-    userId: response.locals.user.id,
-    birthDate: request.body.userBirthday
-  };
-
-  form.setData(formData);
-
-  if (request.body.setSubmitBtn) {
-    if (form.birthDateValidation()) {
-      form.saveBirthDate();
-      response.locals.user.birthday = formData.birthDate;
-    } else {
-      request.session.errors = form.errors;
-      response.redirect('/profile-birthday');
-    }
-  } else if (request.body.delSubmitBtn) {
-    form.deleteBirthDate();
-    response.locals.user.birthday = null;
-  }
-  
-  response.redirect('/profile-settings');
 };
 
 exports.profileEmail = (request, response, next) => {
@@ -112,16 +60,18 @@ exports.profileEmail = (request, response, next) => {
   const form = new EmailUpdate(response.locals.user);
 
   if (request.body.emailSubmitBtn) {
-    form.deleteCode();
-    form.createCode();
-    form.saveCode()
+
+    form.deleteCode()
     .then(() => {
-      // form.sendCode();
-      response.redirect('/profile-email');
+      form.createCode();
+      form.saveCode();
     })
+    .then(() => form.sendCode())
+    .then(() => response.redirect('/profile-email'))
     .catch(error => console.log('settings-controller.js => profileEmail()', error));
 
   } else if (request.body.formSubmitBtn) {
+    
     let formData = {
       code: request.body.code,
       newEmail: request.body.newEmail,
@@ -139,7 +89,6 @@ exports.profileEmail = (request, response, next) => {
       return form.findEmail();
     })
     .then(result => {
-      // if (result === false) form.isFormValid = false;
       if (Array.isArray(result) && result.length > 0) {
         form.isFormValid = false;
         form.errors.newEmail = 'Email addres already in use.';
@@ -147,7 +96,7 @@ exports.profileEmail = (request, response, next) => {
       return form.verifyPassword();
     })
     .then(result => {
-      if (Array.isArray(result) && result.length > 0) return bcrypt.compare(formData.userPass, result[0].user_password);
+      if (Array.isArray(result) && result.length > 0) return bcrypt.compare(formData.userPass, result[0].pass);
       else form.isFormValid = false;
     })
     .then(match => {
@@ -159,13 +108,14 @@ exports.profileEmail = (request, response, next) => {
           return response.redirect('/profile-settings');
         })
         .catch(error => console.log('settings-controller.js => profileEmail()', error));
+      } else {
+        if (typeof match !== 'undefined' && !match) form.errors.password = 'Incorrect password.';
+  
+        request.session.errors = form.errors;
+        request.session.inputs = formData;
+        response.redirect('/profile-email');
       }
 
-      if (typeof match !== 'undefined' && !match) form.errors.password = 'Incorrect password.';
-
-      request.session.errors = form.errors;
-      request.session.inputs = formData;
-      response.redirect('/profile-email');
     })
     .catch(error => console.log('settings-controller.js => profileEmail()', error));   
   }
@@ -176,13 +126,13 @@ exports.profilePassword = (request, response, next) => {
   const form = new PasswordUpdate(response.locals.user);
 
   if (request.body.emailSubmitBtn) {
-    form.deleteCode();
-    form.createCode();
-    form.saveCode()
+    form.deleteCode()
     .then(() => {
-      // form.sendCode();
-      response.redirect('/profile-password');
+      form.createCode();
+      form.saveCode();
     })
+    .then(() => form.sendCode())
+    .then(() => response.redirect('/profile-password'))
     .catch(error => console.log('settings-controller.js => profilePassword()', error));
 
   } else if (request.body.formSubmitBtn) {
@@ -206,7 +156,7 @@ exports.profilePassword = (request, response, next) => {
       return form.verifyPassword();
     })
     .then(result => {
-      if (Array.isArray(result) && result.length > 0) return bcrypt.compare(formData.userPass, result[0].user_password);
+      if (Array.isArray(result) && result.length > 0) return bcrypt.compare(formData.userPass, result[0].pass);
       else form.isFormValid = false;
     })
     .then(match => {

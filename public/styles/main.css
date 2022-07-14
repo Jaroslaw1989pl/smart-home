@@ -1,19 +1,158 @@
+:root {
+  --avatar-img-heiht: 30px;
+}
+
 body {
   margin: 0;
-  background-color: #5c5963;
+  font-family: 'Lato', sans-serif;
+  background-color: #313944;
 }
 
   nav#top-bar {
-    padding: 5px;
     width: 100%;
-    background-color: #3377FF;
+    background-color: #0076da;
   }
 
-    .profile-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
+    .content-left {
+      position: relative;
+      float: left;
+      padding: 10px 15px;
+      width: 30%;
+      height: var(--avatar-img-heiht);
+      /* background-color: #058f00; */
     }
+             
+      .content-left img {
+        width: var(--avatar-img-heiht);
+        height: var(--avatar-img-heiht);
+        margin-right: 10px;
+      }
+
+      .home-link {
+        position: absolute;
+        top: 7px;
+        font-family: 'Russo One', sans-serif;
+        font-size: 35px;
+        text-decoration: none;
+        color: #FFF;
+      }
+
+    .content-right {
+      position: relative;
+      float: right;
+      padding: 10px 15px;
+      width: 30%;
+      height: var(--avatar-img-heiht);
+      text-align: right;
+    }
+    .content-right.authenticated {
+      padding: 10px 90px 10px 10px;
+    }
+
+      #auth-container {
+        /* transform: translateY(25%); */
+      }
+
+        #auth-container a {
+          margin-left: 10px;
+        }
+
+        .auth-btn {
+          padding: 7px;
+          font-size: 15px;
+          font-weight: bold;
+          border: none;
+          border-radius: 5px;
+        }
+        .auth-btn:hover {
+          cursor: pointer;
+        }
+
+        #sign-in-btn {
+          /* border: 2px solid #0035e2; */
+          background-color: #FFF;
+          color: #5fbe77;
+        }
+        #sign-in-btn:hover {
+          color: #64db82;
+        }
+        #sign-in-btn:active {
+          /* background-color: #cecece; */
+          color: #4b8a5b;
+        }
+
+        #sign-up-btn {
+          /* border: 2px solid #FFF; */
+          background-color: #62c57a;
+          color: #FFF;
+        }
+        #sign-up-btn:hover {
+          background-color: #60d67e;
+        }
+        #sign-up-btn:active {
+          background-color: #4b8a5b;
+        }
+
+      .profile-avatar {
+        width: var(--avatar-img-heiht);
+        height: var(--avatar-img-heiht);
+        margin-right: 10px;
+        border-radius: 50%;
+      }
+
+      #dropdown-toggle {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        text-decoration: none;
+        color: #FFF;
+      }
+
+      .dropdown-menu {
+        display: none;
+        width: 100px;
+        position: absolute;
+        right: 0;
+        transform: translateY(7px);
+        padding: 10px;
+        background-color: #475466;
+      }
+
+        .dropdown-menu-group {
+          margin: 0 10px;
+          padding: 10px 0;
+          border-bottom: 1px solid #869e8c;
+        }
+        .dropdown-menu-group:last-of-type {
+          border: none;
+        }
+
+          .menu-item {
+            width: 100%;
+          }
+
+            .menu-item a {
+              text-decoration: none;
+              color: #e7e6e6;
+            }
+            .menu-item a:hover {
+              color: #FFF;
+            }
+
+            .menu-item button {
+              border: none;
+              padding: 0;
+              background-color: transparent;
+              background-repeat:no-repeat;
+              color: #e7e6e6;
+              font-size: 15px;
+              font-weight: bold;
+            }
+            .menu-item button:hover {
+              cursor: pointer;
+              color: #e7e6e6;
+            }
 
   .flash-message {
 

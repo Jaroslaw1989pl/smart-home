@@ -1,38 +1,58 @@
 <%- include('../includes/auth-head.ejs') %>
 
+<!-- SCRIPTS -->
+<script src="/scripts/auth-login-actions.js" defer></script>
+
   <main>
 
-    <div class="auth-panel">
+    <div id="content-left">
 
-      <header>
-        <h1>Sing in</h1>
-        <p>New user? <a href="/registration">Create an account</a></p>
-      </header>
+      <h1>Playfab</h1>
+      <p>Sign in or create an account</p>
+
+    </div>
+
+    <div id="content-right">
+
+      <div class="auth-panel">
+
+        <header id="auth-panel-header">
+          <h1>Sign in</h1>
+          <p>New user? <a href="/registration">Create an account</a></p>
+        </header>
+
+        <!-- AUTHENTICATION ERROR -->
+        <p id="login-error" class="input-error<%= typeof errors !== 'undefined' ? ' active' : '' %>"><%= 
+          typeof errors !== 'undefined' ? errors : ''
+        %></p>
+  
+        <form name="login-form" action="/login" method="POST">
+          
+          <!-- User email input -->
+          <div class="form-input">
+            <!-- <label for="user-email">User email</label><br> -->
+            <input type="text" id="user-email" name="userEmail" class="login-input" placeholder="Email address" value="<%=
+              typeof inputs !== 'undefined' ? inputs.userEmail : ''
+            %>">
+          </div>
+          
+          <!-- User password input -->
+          <div class="form-input">
+            <!-- <label for="user-pass">Password</label><br> -->
+            <input type="password" id="user-pass" name="userPass" class="login-input" placeholder="Password" value="<%=
+              typeof inputs !== 'undefined' ? inputs.userPass : ''
+            %>">
+            <input type="button" class="show-hide-btn" id="login-pass-toggle" value="">
+          </div>
       
-      <form name="login-form" action="/login" method="POST">
-        
-        <!-- User email input -->
-        <label for="user-email">User email</label><br>
-        <input type="text" id="user-email" name="userEmail" class="registration-input" value="<%=
-          typeof inputs !== 'undefined' ? inputs.userEmail : ''
-        %>">
-        <br>
-        
-        <!-- User password input -->
-        <label for="user-pass">Password</label><a href="/reset-password">Forgot password?</a><br>
-        <input type="text" id="user-pass" name="userPass" class="registration-input"  value="<%=
-          typeof inputs !== 'undefined' ? inputs.userPass : ''
-        %>">
-        <br>
-    
-        <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Sign in" >
-        
-      </form>
-      <br>
-      <label for="form-submit-btn" id="login-error" style="color: red;">
-        <%= typeof errors !== 'undefined' ? errors : '' %>
-      </label>
-    
+          <input type="submit" id="login-form-submit-btn" name="formSubmitBtn" value="Sign in" >
+          
+        </form>
+  
+        <p>Forgot password? <a href="/reset-password">Reset password</a></p>
+      
+      </div>
+
     </div>
 
   </main>
