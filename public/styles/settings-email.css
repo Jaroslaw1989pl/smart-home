@@ -1,0 +1,175 @@
+main {
+  padding-top: 50px;
+  text-align: center;
+  color: #FFF;
+}
+
+  #back-anchor {
+    text-decoration: none;
+    color: #b0b8c2;
+  }
+  #back-anchor:hover {
+    color: #ffffff;
+  }
+
+  main header {
+
+  }
+
+  #form {
+    width: 525px;
+    margin: auto;
+    padding: 20px 50px;
+    background-color: #eeebe0;
+    text-align: left;
+    color: #000;
+  }
+
+    #step-list {
+      height: 50px;
+      color: #b0b8c2;
+    }
+    
+      .step {
+        display: inline-table;
+        width: 250px;
+      }
+    
+        .step-icon {
+          float: left;
+          width: 30px;
+          height: 30px;
+          padding: 10px;
+          border-radius: 50%;
+          background-color: #b0b8c2;
+        }
+        .img-active {
+          background-color: #5fbe77;
+        }
+
+          .step img {
+            width: 30px;
+            height: 30px;
+          }
+    
+        .step-content {
+          float: left;
+          width: 170px;
+          padding: 0 15px;
+        }
+      
+          .step-text {
+            height: 24px;
+            border-bottom: 1px solid #c2c2c2;
+          }
+          .text-active {
+            color: #000;
+          }
+
+          .step-content-bottom {
+            height: 25px;
+          }
+
+    .form-error {
+      margin: 15px 0;
+      padding: 10px;
+      text-align: center;
+      font-size: 15px;
+      border: 1px solid #df0000;
+      border-radius: 5px;
+      background-color: #fcc9c9;
+      color: #df0000;
+    }
+
+    .input-error {
+      display: none;
+      margin: 0 0 15px 0;
+      padding: 10px;
+      text-align: center;
+      font-size: 15px;
+      border: 1px solid #df0000;
+      border-radius: 5px;
+      background-color: #fcc9c9;
+      color: #df0000;
+    }
+    .input-error.active {
+      display: block;
+    }
+
+    form[action="/settings-email"] {
+      margin-top: 25px;
+    }
+
+      .form-input {
+        margin-bottom: 25px;
+        width: 100%;
+        border-bottom: 1px solid #c2c2c2;
+      }
+      .form-input:hover {
+        border-bottom: 1px solid #7e7e7e;
+      }
+      .form-input:focus-within {
+        border-bottom: 2px solid #0076da;
+        margin-bottom: 24px
+      }
+
+        input[type="text"] {
+          width: 100%;
+          margin: 0 0 25px 0;
+          padding: 0;
+          border: none;
+          outline: none;
+          background-color: #eeebe0;
+          border-bottom: 1px solid #c2c2c2;
+          font-size: 16px;
+        }
+        input[type="text"]:hover {
+          border-bottom: 1px solid #7e7e7e;
+        }
+        input[type="text"]:focus {
+          border-bottom: 2px solid #0076da;
+          margin-bottom: 24px
+        }
+        input[type="password"], #user-pass {
+          width: 96%;
+          margin: 0;
+          padding: 0;
+          border: none;
+          outline: none;
+          background-color: #eeebe0;
+          font-size: 16px;
+        }
+
+        .show-hide-btn {
+          background: url(/assets/auth/hidden.png);
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center center;
+          cursor:pointer;
+          width: 16px;
+          height: 16px;
+          padding: 0;
+          border: none;
+        }
+
+      .form-submit-btn {
+        width: 260px;
+        margin: 10px 0;
+        padding: 7px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        border: 2px solid #5fa8be;
+        background-color: #FFF;
+        color: #5fa8be;
+      }
+      .form-submit-btn:hover {
+        cursor: pointer;
+        border: 2px solid #69bad3;
+        color: #69bad3;
+      }
+      .form-submit-btn:active {
+        border: 2px solid #589aad;
+        color: #589aad;
+      }

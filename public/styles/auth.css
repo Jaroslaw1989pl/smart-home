@@ -1,9 +1,30 @@
 body {
   margin: 0;
   font-family: 'Lato', sans-serif;
-  /* background-image: url('../../../static/assets/layouts/auth-background.jpg'); */
-  /* background-size: cover; */
+  /* background-image: url('../assets/auth/background-white.jpg');
+  animation: chbg 60s infinite;
+  background-size: 100vh; 
+  background-repeat: no-repeat;
+  height: 100vh; */
   background-color: #cf94ca;
+}
+@keyframes chbg {
+  0% {
+    background:url('../assets/auth/background-white.jpg');
+    background-size: cover;
+  }
+  40% {
+    background:url('../assets/auth/background-white.jpg');
+    background-size: cover;
+  }
+  50% {
+    background:url('../assets/auth/background-dark.jpg');
+    background-size: cover;
+  }
+  90% {
+    background:url('../assets/auth/background-dark.jpg');
+    background-size: cover;
+  }
 }
 
   main {
@@ -39,6 +60,9 @@ body {
 
           .img-input-group {
 
+          }
+          .img-input-group:hover {
+            transform: scale(1.1);
           }
 
             input.avatar {

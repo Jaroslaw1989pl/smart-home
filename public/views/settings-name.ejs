@@ -1,41 +1,59 @@
 <%- include('../includes/main-head.ejs') %>
 
 <!-- STYLES -->
-<!-- <link rel="stylesheet" href="/styles/profile-settings.css"> -->
+<link rel="stylesheet" href="/styles/settings-name.css">
 <!-- SCRIPTS -->
 <script src="/scripts/auth-registration-form.js" defer></script>
 
   <main>
 
-    <a href="/profile-settings"><- Account Management</a>
+    <a href="/profile-settings" id="back-anchor">&#171; Account Management</a>
 
     <header>
       <h1>CHANGE USERNAME</h1>
     </header>
 
-    <% if (!isUpdateAvailable) { %>
+    <div id="form">
 
-      <label for="username-form" id="form-error" style="color: red;"><%= %>You have wait 14 days before next user name updte.</label>
+      <% if (!isUpdateAvailable) { %>
 
-    <% } else { %>
-
-      <form id="username-form" name="username-form" action="/profile-name" method="POST">
+        <p id="date-error" class="form-error"><%= 
+          'Next update will be available ' + new Date(user.nameUpdate * 1000 + 3600000 * 24 * 14).toLocaleDateString() + '.'
+        %></p>
+  
+      <% } else { %>
         
-        <p>You can change your username displayed in the game and on playfab.pl websites. Username change is available once every 14 days.</p>       
-        <!-- User name input -->
-        <label for="user-name">1. Enter a new username:</label><br>
-        <input type="text" id="user-name" name="userName" class="registration-input" value="<%= 
-          typeof inputs !== 'undefined' ? inputs.userName : ''
-        %>">
-        <br><label for="user-name" id="user-name-error" style="color: red;">
-          <%= typeof errors !== 'undefined' ? errors.userName : '' %>
-        </label>
-        <br>  
-        <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Change" >
-          
-      </form>
+        <p>You can change your username displayed on the playfab.pl website. Username change is available once every 14 days.</p>
 
-    <% } %>
+        <!-- AUTHENTICATION ERROR -->
+        <p id="user-name-error" class="input-error<%= typeof errors !== 'undefined' ? ' active' : '' %>"><%= 
+          typeof errors !== 'undefined' ? errors.userName : ''
+        %></p>
+  
+        <form id="username-form" name="username-form" action="/settings-name" method="POST">
+          
+          <!-- User name input -->
+          <label for="user-name"><b>Enter a new username:</b></label><br>
+          <input type="text" id="user-name" name="userName" class="registration-input" value="<%= 
+            typeof inputs !== 'undefined' ? inputs.userName : ''
+          %>">
+          <!-- User name requirements -->
+          <section id="user-name-requirements" class="input-requirements">
+            <strong>Create a user name that:</strong>
+            <ul id="user-name-requirements-list">
+              <li id="user-name-length">contains between 3 and 24 characters</li>
+              <li id="user-name-alfa-num">does not contain non afpha numeric symbols</li>
+              <li id="user-name-uniqueness">is not already in use</li>
+            </ul>
+          </section>
+
+          <input type="submit" id="form-submit-btn" name="formSubmitBtn" value="Change" >
+            
+        </form>
+  
+      <% } %>
+
+    </div>
 
   </main>
   

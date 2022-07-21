@@ -25,13 +25,13 @@ router.route('/reset-password/:token').get(views.newPassword).post();
 router.route('/new-password').get().post(auth.newPassword);
 
 // user profile routes - protected routes
-router.route('/profile-settings').get(/*protected, */views.profileSettings).post();
+router.route('/profile-settings').get(protected, views.profileSettings).post();
 router.route('/profile-avatar').get().post(settings.profileAvatar);
-router.route('/profile-name').get(/*protected, */views.profileName).post(settings.profileName);
-router.route('/profile-email').get(/*protected, */views.profileEmail).post(settings.profileEmail);
-router.route('/profile-password').get(/*protected, */views.profilePassword).post(settings.profilePassword);
+router.route('/settings-name').get(protected, views.profileName).post(settings.profileName);
+router.route('/settings-email').get(protected, views.profileEmail).post(settings.profileEmail);
+router.route('/settings-password').get(protected, views.profilePassword).post(settings.profilePassword);
 
-router.route('/profile-delete').get(/*protected, */views.profileDelete).post(auth.delete);
+router.route('/profile-delete').get(protected, views.profileDelete).post(auth.delete);
 
 router.route('/logout').get().post(auth.logout);
 

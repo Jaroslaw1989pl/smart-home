@@ -67,7 +67,7 @@ exports.profileEmail = (request, response, next) => {
       form.saveCode();
     })
     .then(() => form.sendCode())
-    .then(() => response.redirect('/profile-email'))
+    .then(() => response.redirect('/settings-email'))
     .catch(error => console.log('settings-controller.js => profileEmail()', error));
 
   } else if (request.body.formSubmitBtn) {
@@ -113,7 +113,7 @@ exports.profileEmail = (request, response, next) => {
   
         request.session.errors = form.errors;
         request.session.inputs = formData;
-        response.redirect('/profile-email');
+        response.redirect('/settings-email');
       }
 
     })
@@ -132,7 +132,7 @@ exports.profilePassword = (request, response, next) => {
       form.saveCode();
     })
     .then(() => form.sendCode())
-    .then(() => response.redirect('/profile-password'))
+    .then(() => response.redirect('/settings-password'))
     .catch(error => console.log('settings-controller.js => profilePassword()', error));
 
   } else if (request.body.formSubmitBtn) {
@@ -184,7 +184,7 @@ exports.profilePassword = (request, response, next) => {
       } else {
         request.session.errors = form.errors;
         request.session.inputs = formData;
-        response.redirect('/profile-password');
+        response.redirect('/settings-password');
       }
     })
     .catch(error => console.log('settings-controller.js => profilePassword()', error));

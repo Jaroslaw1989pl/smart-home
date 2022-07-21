@@ -55,7 +55,7 @@
           </div>
 
           <div class="img-input-group">
-            <input type="checkbox" class="avatar" name="avatar" id="beige" value="beige" <%= user.avatar === 'purple' ? 'checked' : '' %>>
+            <input type="checkbox" class="avatar" name="avatar" id="beige" value="beige" <%= user.avatar === 'beige' ? 'checked' : '' %>>
             <label for="beige"><img src="/assets/profile-avatars/beige.jpg" alt=""></label>
           </div>
 
@@ -73,20 +73,20 @@
             <!-- Username section -->
             <div class="info-personal-wrapper username">
               <div class="info-cell-icon">
-                <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+                <img src="/assets/settings-icons/id-card.png" alt="info-cell-icon">
               </div>
               <div class="info-cell-value">
                 <h3><%= user.name %></h3>
               </div>
               <div class="info-cell-edit">
-                <a href="/profile-name">Change</a>
+                <a href="/settings-name"><p>Change</p></a>
               </div>
               <div style="clear: both;"></div>
             </div>
             <!-- User location section -->
             <div class="info-personal-wrapper location">
               <div class="info-cell-icon">
-                <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+                <img src="/assets/settings-icons/globe.png" alt="info-cell-icon">
               </div>
               <div class="info-cell-value">
                 <p id="user-location">Place of residance: </p><p id="user-location-info"></p>
@@ -102,27 +102,27 @@
             <!-- User email section -->
             <div class="info-personal-wrapper email">
               <div class="info-cell-icon">
-                <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+                <img src="/assets/settings-icons/email.png" alt="info-cell-icon">
               </div>
               <div class="info-cell-value">
-                <p><b><%= user.email %></b></p>
-                <p>Email address added: <%= new Date(user.emailUpdate * 1000) %></p>
+                <p id="p-email"><b><%= user.email %></b></p>
+                <p id="p-date">Email address added: <%= new Date(user.emailUpdate * 1000).toLocaleDateString() %></p>
               </div>
               <div class="info-cell-edit">
-                <a href="/profile-email">Change</a>
+                <a href="/settings-email"><p>Change</p></a>
               </div>
               <div style="clear: both;"></div>
             </div>
             <!-- User password section -->
             <div class="info-personal-wrapper">
               <div class="info-cell-icon">
-                <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+                <img src="/assets/settings-icons/lock.png" alt="info-cell-icon">
               </div>
               <div class="info-cell-value">
-                <p>Password added: <%= new Date(user.passwordUpdate * 1000) %></p>
+                <p>Password added: <%= new Date(user.passwordUpdate * 1000).toLocaleDateString() %></p>
               </div>
               <div class="info-cell-edit">
-                <a href="/profile-password">Change</a>
+                <a href="/settings-password"><p>Change</p></a>
               </div>
               <div style="clear: both;"></div>
             </div>
@@ -133,7 +133,7 @@
             <!-- User delete section -->
             <div class="info-personal-wrapper data">
               <div class="info-cell-icon">
-                <img src="/assets/img/settings/settings-tmp.png" alt="info-cell-icon">
+                <img src="/assets/settings-icons/user.png" alt="info-cell-icon">
               </div>
               <div class="info-cell-value">
                 <p>Delete <b><%= %></b> user account</p>
@@ -141,7 +141,6 @@
               <div class="info-cell-edit">
                 <a href="/profile-delete"><button>Delete account</button></a>
               </div>
-              <p>UWAGA do usunięcia! Przy usuwaniu konta należy usuwać wszystkie dane z tabel</p>
               <div style="clear: both;"></div>
             </div>
           </div>

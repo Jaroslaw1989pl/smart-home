@@ -182,7 +182,7 @@ exports.delete = (request, response, next) => {
           request.session.inputs = request.body.userPass;
           response.redirect('/profile-delete');
         } else {
-          bcrypt.compare(request.body.userPass, result[0].user_password)
+          bcrypt.compare(request.body.userPass, result[0].pass)
           .then(match => {
             if (match) {
               // correct password

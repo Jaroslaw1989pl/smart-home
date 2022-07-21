@@ -19,7 +19,6 @@ body {
       padding: 10px 15px;
       width: 30%;
       height: var(--avatar-img-heiht);
-      /* background-color: #058f00; */
     }
              
       .content-left img {
@@ -69,7 +68,6 @@ body {
         }
 
         #sign-in-btn {
-          /* border: 2px solid #0035e2; */
           background-color: #FFF;
           color: #5fbe77;
         }
@@ -77,12 +75,10 @@ body {
           color: #64db82;
         }
         #sign-in-btn:active {
-          /* background-color: #cecece; */
           color: #4b8a5b;
         }
 
         #sign-up-btn {
-          /* border: 2px solid #FFF; */
           background-color: #62c57a;
           color: #FFF;
         }
@@ -155,19 +151,44 @@ body {
             }
 
   .flash-message {
-
+    position: relative;
+    animation: flash 10s;
+  }
+  @keyframes flash {
+    0% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
   }
 
     .message-success {
-      border: 2px solid #008000;
+      position: absolute;
+      right: 0;
+      width: 300px;
+      margin: 10px;
+      padding: 10px;
       border-radius: 5px;
-      background-color: #27e250;
-      color: #058f00;
+      background-color: #55b369;
+      text-align: center;
+      color: #FFF;
     }
 
     .message-error {
-      border: 2px solid #e6421a;
+      position: absolute;
+      right: 0;
+      width: 300px;
+      margin: 10px;
+      padding: 10px;
       border-radius: 5px;
-      background-color: #e27227;
-      color: #8f1d00;
+      background-color: #e2462a;
+      text-align: center;
+      color: #FFF;
     }

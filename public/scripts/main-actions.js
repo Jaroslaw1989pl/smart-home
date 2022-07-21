@@ -11,6 +11,14 @@ dropdown.addEventListener('click', event => {
   else if (menu.style.display == 'block') menu.style.display = '';
 });
 
+// flash messages
+
+if (document.querySelector('.flash-message [class*="message"]')) {
+  setTimeout(() => document.querySelector('.flash-message [class*="message"]').remove(), 9000);
+}
+
+
+
 // logout action
 // const logoutAnchor = document.getElementById('logout-anchor');
 // const logoutBtn = document.getElementById('logout-btn');

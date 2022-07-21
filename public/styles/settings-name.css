@@ -1,0 +1,104 @@
+main {
+  padding-top: 50px;
+  text-align: center;
+  color: #FFF;
+}
+
+  #back-anchor {
+    text-decoration: none;
+    color: #b0b8c2;
+  }
+  #back-anchor:hover {
+    color: #ffffff;
+  }
+
+  main header {
+
+  }
+
+  #form {
+    width: 400px;
+    margin: auto;
+    padding: 20px 50px;
+    background-color: #eeebe0;
+    text-align: left;
+    color: #000;
+  }
+
+    .form-error {
+      margin: 15px 0;
+      padding: 10px;
+      text-align: center;
+      font-size: 15px;
+      border: 1px solid #df0000;
+      border-radius: 5px;
+      background-color: #fcc9c9;
+      color: #df0000;
+    }
+
+    .input-error {
+      display: none;
+      margin: 15px 0;
+      padding: 10px;
+      text-align: center;
+      font-size: 15px;
+      border: 1px solid #df0000;
+      border-radius: 5px;
+      background-color: #fcc9c9;
+      color: #df0000;
+    }
+    .input-error.active {
+      display: block;
+    }
+
+    form {
+      
+    }
+
+      input[type="text"] {
+        width: 100%;
+        margin: 15px 0 25px 0;
+        border: none;
+        outline: none;
+        background-color: #eeebe0;
+        border-bottom: 1px solid #c2c2c2;
+        font-size: 16px;
+      }
+      input[type="text"]:hover {
+        border-bottom: 1px solid #7e7e7e;
+      }
+
+      #user-name-requirements {
+        display: none;
+      }
+
+        #user-name-requirements ul {
+          list-style-position: inside;
+          padding: 0;
+        }
+
+          #user-name-requirements li {
+            color: #7e7e7e;
+          }
+
+      #form-submit-btn {
+        width: 100%;
+        margin: 10px 0;
+        padding: 7px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        border: 2px solid #5fbe77;
+        background-color: #FFF;
+        color: #5fbe77;
+      }
+      #form-submit-btn:hover {
+        cursor: pointer;
+        border: 2px solid #64db82;
+        color: #64db82;
+      }
+      #form-submit-btn:active {
+        border: 2px solid #4b8a5b;
+        color: #4b8a5b;
+      }

@@ -4,6 +4,7 @@ const NameUpdate = require('./../models/settings-name.class');
 const DeleteUser = require('./../models/auth-delete.class');
 const NewPassword = require('./../models/auth-password-new.class');
 const PasswordUpdate = require('../models/settings-password');
+const customFunctions = require('../middleware/functions');
 
 
 /*** PUBLIC VIEWS ***/
@@ -178,8 +179,10 @@ exports.profileEmail = (request, response, next) => {
   .then(result => {
     // 3. If code was expired - delete code
     if (result.length > 0 && result[0].expire_date < parseInt(Date.now() / 1000)) form.deleteCode();
-    else if (result.length > 0 && result[0].expire_date > parseInt(Date.now() / 1000)) data.isEmailSent = true;
-    // if (result.length > 0) data.isEmailSent = true;
+    else if (result.length > 0 && result[0].expire_date > parseInt(Date.now() / 1000)) {
+      data.isEmailSent = true;
+      data.hiddenEmail = customFunctions.hideEmail(response.locals.user.email);
+    }
     response.render('settings-email.ejs', data);
   })
   .catch(error => console.log('views-controller.js => profileEmail() > getLastUpdate()', error));
@@ -203,15 +206,17 @@ exports.profilePassword = (request, response, next) => {
   const form = new PasswordUpdate(response.locals.user);
   form.getLastUpdate()
   .then(result => {
-    if (result[0].pass_update + 60/*3600000 * 24 * 14*/ < parseInt(Date.now() / 1000)) {
-      // form.deleteCode();
-      data.isUpdateAvailable = true;
-    }
+    if (result[0].pass_update + 60/*3600000 * 24 * 14*/ < parseInt(Date.now() / 1000)) data.isUpdateAvailable = true;
     // 2. Is code was send (code exists in the database)
     return form.checkStep();
   })
   .then(result => {
-    if (result.length > 0) data.isEmailSent = true;
+    // 3. If code was expired - delete code
+    if (result.length > 0 && result[0].expire_date < parseInt(Date.now() / 1000)) form.deleteCode();
+    else if (result.length > 0 && result[0].expire_date > parseInt(Date.now() / 1000)) {
+      data.isEmailSent = true;
+      data.hiddenEmail = customFunctions.hideEmail(response.locals.user.email);
+    }
     response.render('settings-password.ejs', data);
   })
   .catch(error => console.log('views-controller.js => profileEmail() > getLastUpdate()', error));
@@ -230,7 +235,8 @@ exports.profileDelete = (request, response, next) => {
         html: {
           title: 'Playfab | Profile delete'
         },
-        isEmailSent: false
+        isEmailSent: false,
+        isCodeCorrect: false
       };
 
       request.session.isCodeCorrect = undefined;
@@ -244,7 +250,9 @@ exports.profileDelete = (request, response, next) => {
         },
         inputs: request.session.inputs,
         errors: request.session.errors,
-        isEmailSent: true
+        isEmailSent: true,
+        hiddenEmail: customFunctions.hideEmail(response.locals.user.email),
+        isCodeCorrect: false
       };
       if (request.session.isCodeCorrect === true) data.isCodeCorrect = true;
 

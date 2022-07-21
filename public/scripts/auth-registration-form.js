@@ -220,9 +220,13 @@ if (document.getElementById('user-pass')) {
   const userPassConfParagraph = document.getElementById('pass-conf-error');
 
   const passConfValidation = () => {
-    if (userPassConfInput.value.length > 0 || userPassInput.value !== userPassConfInput.value) {
-      userPassConfParagraph.style.display = 'block';
-      userPassConfParagraph.textContent = 'Passwords are not the same.';
+    if (userPassConfInput.value.length > 0) {
+      if (userPassInput.value === userPassConfInput.value) {
+        userPassConfParagraph.style.display = 'none';
+      } else {
+        userPassConfParagraph.style.display = 'block';
+        userPassConfParagraph.textContent = 'Passwords are not the same.';
+      }
     } else {
       userPassConfParagraph.style.display = 'none';
     }
