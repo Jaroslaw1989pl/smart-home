@@ -16,7 +16,7 @@ app.set('views', 'public/views');
 // built-in middleware function that serves static files
 app.use(express.static(config.ROOT_DIR + '/public'));
 // 
-app.use(session({secret: 'ks12256', name: 'sessionId', resave: false, saveUninitialized: false}));
+app.use(session({secret: '', name: 'sessionId', resave: false, saveUninitialized: false}));
 
 // setting up local variables passed to all views
 app.use((request, response, next) => {
